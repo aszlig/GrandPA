@@ -15,10 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with GrandPA. If not, see <http://www.gnu.org/licenses/>.
 
-from grandpa import controller
-from grandpa import stage
+"""
+This is the Tavern which holds our visual bars. The Tavern itself doesn't have
+any window itself, but updates the bars.
+"""
 
-import root
+from grandpa import stage
+from grandpa import locking
+
 import fixture
 
 class Tavern(object):
@@ -27,19 +31,16 @@ class Tavern(object):
         self.bars = []
         self.selected = set()
 
-        self.controller = controller.Controller(root)
-        self.controller.start()
-
     def newbar(self, x, y, inverted=False):
         num = len(self.bars) + 1
-        bar = fixture.Bar(self.root.view, num, x, y, inverted)
+        bar = fixture.Bar(self.root, num, x, y, inverted)
         self.bars.append(bar)
 
     def refresh(self):
-        root.refresh_lock.acquire()
+        locking.refresh_lock.acquire()
         for b in self.bars:
             b.refresh()
-        root.refresh_lock.release()
+        locking.refresh_lock.release()
 
     def get_chaser_fixtures(self):
         """
@@ -189,13 +190,13 @@ class Tavern(object):
                 s.dimmer = value
 
     def setstage(self, setting):
-        height, width = self.root.view.getmaxyx()
+        height, width = self.root.view_win.getmaxyx()
         cls = getattr(stage, setting)
         self.stage = cls()
-        self.stage.set_view(self, root.BAR_LENGTH, width, height)
+        self.stage.set_view(self, self.root.BAR_LENGTH, width, height)
 
         # associate controller with all bars and interface sections
         for n, b in enumerate(self.bars):
             addr, fixtype = self.stage.num2fixture(n + 1)
             sects = b.sections
-            self.controller.add_bar(addr, fixtype, sects)
+            self.root.controller.add_bar(addr, fixtype, sects)

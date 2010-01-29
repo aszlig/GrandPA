@@ -23,7 +23,7 @@ import curses
 from grandpa import style
 from grandpa.color import Color
 
-import root
+from grandpa import locking
 
 class Section(object):
     """
@@ -99,24 +99,25 @@ class Section(object):
         self.window.hline(0, 0, dimchar, self.length, attr)
 
     def refresh(self):
-        root.refresh_lock.acquire()
+        locking.refresh_lock.acquire()
         self.update()
         self.window.refresh()
-        root.refresh_lock.release()
+        locking.refresh_lock.release()
 
 class Bar(object):
-    def __init__(self, window, number, x, y, inverted=False):
+    def __init__(self, root, number, x, y, inverted=False):
+        self.root = root
         self.selected = False
         self.inverted = inverted
 
-        self.bar = window.derwin(3, root.BAR_LENGTH + 2, y, x)
+        self.win = root.view_win.derwin(3, root.BAR_LENGTH + 2, y, x)
         self.number = number
 
         sectsize = root.BAR_LENGTH / 3
 
         # initialize dimmer sections
         for s in xrange(3):
-            sect = self.bar.derwin(1, sectsize + 1, 1, 1 + sectsize * s)
+            sect = self.win.derwin(1, sectsize + 1, 1, 1 + sectsize * s)
             setattr(self, 'section%d' % (s + 1), Section(sect, sectsize))
 
         if self.inverted:
@@ -124,17 +125,17 @@ class Bar(object):
         else:
             self.sections = (self.section1, self.section2, self.section3)
 
-        self.draw_box()
+        self.update()
 
-    def draw_box(self):
+    def update(self):
         if self.selected:
             attr = style.attr('bar_selected')
         else:
             attr = style.attr('bar_deselected')
 
-        self.bar.attron(attr)
-        self.bar.box()
-        self.bar.attroff(attr)
+        self.win.attron(attr)
+        self.win.box()
+        self.win.attroff(attr)
 
         for n in xrange(3):
             if self.inverted:
@@ -149,19 +150,19 @@ class Bar(object):
             else:
                 attr = style.attr('section_deselected')
 
-            self.bar.attron(attr)
-            self.bar.addstr(0, 2 + n * (root.BAR_LENGTH / 3),
+            self.win.attron(attr)
+            self.win.addstr(0, 2 + n * (self.root.BAR_LENGTH / 3),
                             " %d.%d " % (self.number, sectnum + 1))
-            self.bar.addch(curses.ACS_DARROW)
-            self.bar.addch(' ')
-            self.bar.attroff(attr)
+            self.win.addch(curses.ACS_DARROW)
+            self.win.addch(' ')
+            self.win.attroff(attr)
 
     def refresh(self):
-        root.refresh_lock.acquire()
-        self.draw_box()
+        locking.refresh_lock.acquire()
+        self.update()
 
         for s in self.sections:
             s.refresh()
 
-        self.bar.refresh()
-        root.refresh_lock.release()
+        self.win.refresh()
+        locking.refresh_lock.release()

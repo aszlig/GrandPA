@@ -18,7 +18,7 @@
 import threading
 import curses
 
-import root
+from grandpa import locking
 
 class Fader(object):
     def __init__(self, root, window):
@@ -72,17 +72,17 @@ class Fader(object):
             self.fader.vline(top, 0, curses.ACS_BLOCK, bottom)
 
         # only refresh the inner window
-        root.refresh_lock.acquire()
+        locking.refresh_lock.acquire()
         self.fader.refresh()
-        root.refresh_lock.release()
+        locking.refresh_lock.release()
 
         self.root.tavern.update_dyndimmer(self.faderval)
-        self.root.tavern.controller.dim_update()
+        self.root.controller.dim_update()
 
         self.update_lock.release()
 
     def refresh(self):
-        root.refresh_lock.acquire()
+        locking.refresh_lock.acquire()
         self.outer.refresh()
         self.fader.refresh()
-        root.refresh_lock.release()
+        locking.refresh_lock.release()

@@ -19,13 +19,13 @@ import threading
 
 from grandpa import style
 
-import root
+from grandpa import locking
 
 class StatusLine(object):
-    def __init__(self, root):
-        max_y, max_x = root.root.getmaxyx()
-        self.status = root.root.derwin(1, max_x, max_y - 1, 0)
-        self.width = max_x
+    def __init__(self, root, win):
+        self.root = root
+        self.win = win
+        self.width = win.getmaxyx()[1]
 
         self.cmd = ''
         self.dmxerror = None
@@ -59,7 +59,7 @@ class StatusLine(object):
 
         line += err.rjust(self.width - len(line) - 1)
 
-        self.status.addnstr(0, 0, line, self.width - 1, attr)
+        self.win.addnstr(0, 0, line, self.width - 1, attr)
 
         self.update_lock.release()
 
@@ -78,6 +78,6 @@ class StatusLine(object):
         self.refresh()
 
     def refresh(self):
-        root.refresh_lock.acquire()
-        self.status.refresh()
-        root.refresh_lock.release()
+        locking.refresh_lock.acquire()
+        self.win.refresh()
+        locking.refresh_lock.release()

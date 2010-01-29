@@ -21,7 +21,7 @@ from grandpa import style
 from grandpa.chaser import Chaser
 import grandpa.chasers
 
-import root
+from grandpa import locking
 
 class Menu(object):
     COLUMNS = 6
@@ -71,7 +71,7 @@ class Menu(object):
         except IndexError:
             return None
 
-    def activate(self, tavern):
+    def activate(self):
         """
         Toggle-activate a chaser.
         """
@@ -79,12 +79,12 @@ class Menu(object):
         if chaser is None:
             return
 
-        if tavern.controller.is_running_chaser(chaser):
-            tavern.controller.remove_chaser(chaser)
+        if self.root.controller.is_running_chaser(chaser):
+            self.root.controller.remove_chaser(chaser)
             self.active_chasers.remove(chaser)
         else:
-            s = tavern.get_selection_struct()
-            tavern.controller.add_chaser(chaser, s)
+            s = self.root.tavern.get_selection_struct()
+            self.root.controller.add_chaser(chaser, s)
             if not chaser.is_cue:
                 self.active_chasers.append(chaser)
 
@@ -97,7 +97,7 @@ class Menu(object):
             pass
         self.update()
 
-    def learn_speed(self, controller):
+    def learn_speed(self):
         curtime = time.time()
 
         chaser = self.get_chaser()
@@ -107,7 +107,7 @@ class Menu(object):
             speed = curtime - last_time
 
             if chaser in self.active_chasers:
-                controller.set_speed(chaser, speed)
+                self.root.controller.set_speed(chaser, speed)
         else:
             speed = None
 
@@ -207,7 +207,7 @@ class Menu(object):
             self.listlen
 
     def refresh(self):
-        root.refresh_lock.acquire()
+        locking.refresh_lock.acquire()
         self.outer.refresh()
         self.menu.refresh()
-        root.refresh_lock.release()
+        locking.refresh_lock.release()

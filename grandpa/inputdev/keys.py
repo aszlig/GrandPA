@@ -165,7 +165,7 @@ class Keys(threading.Thread):
             # prevent keyboard repeat
             old_keycode = self.keycode
             while True:
-                self.keycode = self.root.root.getch()
+                self.keycode = self.root.getch()
                 if self.keycode == old_keycode:
                     continue
                 break
@@ -191,9 +191,9 @@ class Keys(threading.Thread):
 
             # menu
             if self.pressed('list_activate'):
-                self.root.menu.activate(self.root.tavern)
+                self.root.menu.activate()
             elif self.pressed('learn_speed'):
-                self.root.menu.learn_speed(self.root.tavern.controller)
+                self.root.menu.learn_speed()
             elif self.pressed('list_up'):
                 self.root.menu.up()
             elif self.pressed('list_down'):
@@ -266,7 +266,7 @@ class Keys(threading.Thread):
         self.root.tavern.set_selection_struct(self.selects[self.cur][dimmer],
                                               sectfun=f, barfun=f)
 
-        self.root.tavern.controller.dim_update()
+        self.root.controller.dim_update()
 
     def saveflash(self, dimmer):
         """

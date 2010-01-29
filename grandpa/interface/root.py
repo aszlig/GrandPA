@@ -17,31 +17,40 @@
 
 import threading
 
+from grandpa import controller
+
 from status import StatusLine
 from tavern import Tavern
 from menu import Menu
 from fader import Fader
 
-# must be divisible by 3
-BAR_LENGTH = 39
-
-refresh_lock = threading.RLock()
+from grandpa import locking
 
 class Root(object):
-    def __init__(self, rootwin, config):
-        self.root = rootwin
+    # must be divisible by 3
+    BAR_LENGTH = 39
+
+    def __init__(self, win, config):
+        self.win = win
         self.config = config
 
-        self.view = self.viewport()
-        self.status = StatusLine(self)
+        root_my, root_mx = win.getmaxyx()
 
-        view_y, view_x = self.view.getparyx()
-        root_my, root_mx = rootwin.getmaxyx()
+        # the dmx/chaser controller
+        self.controller = controller.Controller(self)
+
+        # viewport
+        self.view_win = self.viewport()
+        view_y, view_x = self.view_win.getparyx()
+
+        # status line
+        status_win = win.derwin(1, root_mx, root_my - 1, 0)
+        self.status = StatusLine(self, status_win)
 
         # menu
         menu_height = view_y
         menu_width = root_mx
-        menu_win = rootwin.derwin(menu_height, menu_width, 0, 0)
+        menu_win = win.derwin(menu_height, menu_width, 0, 0)
         self.menu = Menu(self, menu_win)
 
         self.tavern = Tavern(self)
@@ -53,14 +62,16 @@ class Root(object):
         fader_height = root_my - menu_height - 1
         fader_x = root_mx - 3
         fader_y = menu_height
-        fader_win = rootwin.derwin(fader_height, fader_width, fader_y, fader_x)
+        fader_win = win.derwin(fader_height, fader_width, fader_y, fader_x)
         self.fader = Fader(self, fader_win)
+
+        self.controller.start()
 
     def viewport(self):
         """
         Stage simulation.
         """
-        max_y, max_x = self.root.getmaxyx()
+        max_y, max_x = self.win.getmaxyx()
 
         width = int(max_x * 0.75)
         height = int(max_y * 0.75)
@@ -69,12 +80,16 @@ class Root(object):
         # towards the status bar
         y = max_y - height
 
-        view = self.root.derwin(height, width, y, x)
+        view = self.win.derwin(height, width, y, x)
         return view
 
+    def getch(self):
+        return self.win.getch()
+
     def refresh(self):
-        refresh_lock.acquire()
+        locking.refresh_lock.acquire()
         self.tavern.refresh()
         self.status.refresh()
         self.menu.refresh()
-        refresh_lock.release()
+        self.view_win.refresh()
+        locking.refresh_lock.release()
