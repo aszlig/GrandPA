@@ -96,7 +96,7 @@ class Grandpa(object):
             keyhandler.is_active.task_done()
 
         mousehandler.stop()
-        root.controller.stop()
+        root.stop()
 
     def startapp(self):
         inputdev.rawkbd.set_raw_kbd()

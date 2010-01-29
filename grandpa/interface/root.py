@@ -67,6 +67,9 @@ class Root(object):
 
         self.controller.start()
 
+    def stop(self):
+        self.controller.stop()
+
     def viewport(self):
         """
         Stage simulation.
