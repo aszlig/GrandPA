@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with GrandPA. If not, see <http://www.gnu.org/licenses/>.
 
+import os
 import serial
 
 class DMXError(Exception):
@@ -23,6 +24,10 @@ class DMXError(Exception):
 class DMX(object):
     def __init__(self, port):
         baudrate = 57600 # 115200
+
+        if not os.path.exists(port):
+            raise DMXError("Serial port at %s not found!" % port)
+
         try:
             self.device = serial.Serial(port=port, baudrate=baudrate, timeout=1)
         except serial.SerialException, e:
