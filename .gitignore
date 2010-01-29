@@ -1,2 +1,3 @@
 *.pyc
+build
 grandpa/inputdev/_mouse.so
