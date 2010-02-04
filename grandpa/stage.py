@@ -26,7 +26,6 @@ class Stage(object):
 
 class Rockfabrik(Stage):
     FIXTURE_MAPPING = {
-        #1: (0x001, 'test'),
         3:  (0x12d, 'eurolite'),
         2:  (0x139, 'eurolite'),
         1:  (0x145, 'eurolite'),
@@ -37,8 +36,8 @@ class Rockfabrik(Stage):
         8:  (0x181, 'eurolite'),
         7:  (0x18d, 'eurolite'),
         6:  (0x199, 'eurolite'),
-        5:  (0x1a5, 'americandj'),
-        4:  (0x1b0, 'americandj'),
+        5:  (0x1a5, 'eurolite'),
+        4:  (0x1b1, 'eurolite'),
     }
 
     def set_view(self, tavern, bar_length, width, height):
