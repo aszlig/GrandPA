@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with GrandPA. If not, see <http://www.gnu.org/licenses/>.
 
+import math
 from grandpa.color import Color
 
 class Section(object):
@@ -43,8 +44,15 @@ class Bar(object):
             if s.visual.dimmer is None:
                 colors += [0, 0, 0]
             else:
-                colors += [int(c / 255.0 * s.visual.dimmer)
-                           for c in s.color.to_tuple()]
+                for c in s.color.to_tuple():
+                    dim = c / 255.0 * s.visual.dimmer
+                    col = int(math.pow(2, 8.0 / 255.0 * dim))
+                    if col > 255:
+                        col = 255
+                    elif col <= 1:
+                        col = 0
+                    colors.append(col)
+
             s.visual.dimmer_lock.release()
         return colors
 
