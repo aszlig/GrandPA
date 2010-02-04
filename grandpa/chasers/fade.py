@@ -28,7 +28,7 @@ class SimpleFade(Chaser):
         self.jumper = iter(self.sectionjump())
 
     def sectionjump(self):
-        x = list(range(self.length))
+        x = list(range(min(self.length, len(self.sections))))
         mod = 255 / self.frames
 
         while True:
