@@ -32,12 +32,18 @@
 static PyObject *mouse_open(PyObject* self)
 {
 	Gpm_Connect connection;
+	int ret;
+
 	connection.eventMask = ~0;
 	connection.defaultMask = 0;
 	connection.minMod = 0;
 	connection.maxMod = ~0;
 
-	if (Gpm_Open(&connection, 0) == -1) {
+	Py_BEGIN_ALLOW_THREADS
+	ret = Gpm_Open(&connection, 0);
+	Py_END_ALLOW_THREADS
+
+	if (ret == -1) {
 		return PyErr_SetFromErrno(PyExc_OSError);
 	}
 
@@ -128,7 +134,9 @@ static PyObject *mouse_getpos(PyObject *self, PyObject *args, PyObject *kwargs)
 
 static PyObject *mouse_close(PyObject *self)
 {
+	Py_BEGIN_ALLOW_THREADS
 	Gpm_Close();
+	Py_END_ALLOW_THREADS
 
 	Py_INCREF(Py_None);
 	return Py_None;
@@ -138,7 +146,7 @@ static PyMethodDef mouse_methods[] = {
 	{"open", (PyCFunction)mouse_open, METH_NOARGS, "Connect to GPM."},
 	{"getpos", (PyCFunction)mouse_getpos, METH_KEYWORDS, mouse_getpos__doc__},
 	{"close", (PyCFunction)mouse_close, METH_NOARGS, "Close the connection to GPM."},
-	{ NULL, NULL }
+	{NULL, NULL}
 };
 
 PyMODINIT_FUNC init_mouse(void)
