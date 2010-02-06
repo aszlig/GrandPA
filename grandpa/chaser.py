@@ -52,19 +52,14 @@ class Chaser(threading.Thread):
     def init_sections(self):
         self.all_sections = fixture.Section(None, None)
 
-        #bc = [s.basecolor for s in self.sections if s.color]
-        #try:
-        #    self.all_sections.basecolor = bc[0]
-        #except IndexError:
-        #    self.all_sections.basecolor = Color()
-
     def propagate_sections(self):
         if not self.all_sections.has_changed():
             return
 
         for s in self.sections:
             s.color.patch_color(self.all_sections.color)
-            #s.basecolor.set_color(self.all_sections.basecolor)
+
+        self.all_sections.color.reset_changed()
 
     def dmxout(self):
         bars = set([s.bar for s in self.sections])

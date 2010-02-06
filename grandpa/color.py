@@ -44,7 +44,7 @@ class Color(object):
         self.__blue = int(blue)
         self.__alpha = int(alpha)
 
-        self._changed = [False] * 4
+        self.reset_changed()
 
     def __correct_channel(self, value):
         if value > 255:
@@ -191,6 +191,9 @@ class Color(object):
         diff = zip(color._changed, color.to_tuple(alpha=True))
         new = [None if not f else c for f, c in diff]
         self.__set_channels_direct(*new)
+
+    def reset_changed(self):
+        self._changed = [False] * 4
 
     def fade_to(self, color, steps=255):
         step = int(steps / 255)
