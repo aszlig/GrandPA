@@ -44,10 +44,25 @@ class SimpleShutter(Chaser):
 class DistortedShutter(Chaser):
     label = 'Distorted shutter'
 
-    def next(self):
-        sects = random.sample(xrange(self.sectlen), int(self.sectlen * 0.75))
-        for n, s in enumerate(self.sections):
-            if n in sects:
-                s.color.alpha = 0 if s.color.alpha > 0 else 255
+    def setup(self):
+        self.i = 0
 
-        self.wait(0.3, frames=1)
+    def restart(self):
+        self.i = 0
+
+    def next(self):
+        if self.i == 0:
+            sects = random.sample(xrange(self.sectlen), int(self.sectlen * 0.75))
+            for n, s in enumerate(self.sections):
+                if n in sects:
+                    s.color.alpha = 255
+                else:
+                    s.color.alpha = 0
+        else:
+            self.all_sections.color.alpha = 0
+
+        self.wait(0.3, frames=10)
+
+        self.i += 1
+        if self.i >= 10:
+            self.i = 0
