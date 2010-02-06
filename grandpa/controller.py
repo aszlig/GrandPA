@@ -140,6 +140,7 @@ class Controller(threading.Thread):
             try:
                 addr, values = self.queue.get(timeout=1)
             except ValueError:
+                self.queue.task_done()
                 break
             except Queue.Empty:
                 continue
@@ -147,15 +148,15 @@ class Controller(threading.Thread):
             if addr == 'exception':
                 self.chasers.pop(values)
                 self.root.menu.fail_chaser(values)
-                continue
             elif addr is None:
                 for bar in self.bars:
                     addr, values = bar.dmxout()
                     self.dmxout_single(addr, values)
                 self.dmxflush()
-                continue
+            else:
+                self.dmxout(addr, values)
 
-            self.dmxout(addr, values)
+            self.queue.task_done()
 
         self.cleanup()
 
