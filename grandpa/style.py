@@ -89,5 +89,8 @@ class Default(Style):
     list_active_normal    = Attr(curses.COLOR_YELLOW, attr=curses.A_BOLD)
     list_active_highlight = Attr(curses.COLOR_YELLOW, curses.COLOR_GREEN,  curses.A_BOLD)
 
+    # obvious ;-)
+    clock                 = Attr(curses.COLOR_WHITE,   attr=curses.A_BOLD)
+
 theme = Default()
 attr = theme.attr

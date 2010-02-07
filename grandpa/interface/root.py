@@ -23,6 +23,7 @@ from status import StatusLine
 from tavern import Tavern
 from menu import Menu
 from fader import Fader
+from clock import Clock
 
 from grandpa import locking
 
@@ -42,6 +43,12 @@ class Root(object):
         # viewport
         self.view_win = self.viewport()
         view_y, view_x = self.view_win.getparyx()
+        view_max_y, view_max_x = self.view_win.getmaxyx()
+
+        clock_win = self.view_win.derwin(3, 41, int(view_max_y / 2 - 1.5),
+                                         int(view_max_x / 2 - 20))
+
+        self.clock = Clock(clock_win)
 
         # status line
         status_win = win.derwin(1, root_mx, root_my - 1, 0)
@@ -66,8 +73,10 @@ class Root(object):
         self.fader = Fader(self, fader_win)
 
         self.controller.start()
+        self.clock.start()
 
     def stop(self):
+        self.clock.stop()
         self.controller.stop()
 
     def viewport(self):
