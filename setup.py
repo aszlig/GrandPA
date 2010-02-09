@@ -3,7 +3,7 @@ from distutils.core import setup, Extension
 
 mouse = Extension('grandpa.inputdev._mouse',
                   libraries = ['gpm'],
-                  sources = ['mouse.c'])
+                  sources = ['ext/mouse.c'])
 
 setup(name = 'GrandPA',
       version = '0.5',
