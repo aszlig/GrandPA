@@ -1,52 +1,51 @@
 import time
 import threading
-import logging
 
 from grandpa import style
 from grandpa import locking
 
 NUMBERS = {
-    "1": ["    ",
+    '1': ["    ",
           "/|  ",
           " |  "],
 
-    "2": ["_   ",
+    '2': ["_   ",
           " )  ",
           "/_  "],
 
-    "3": ["_   ",
+    '3': ["_   ",
           "_)  ",
           "_)  "],
 
-    "4": ["    ",
+    '4': ["    ",
           "|_|_",
           "  | "],
 
-    "5": [" _  ",
+    '5': [" _  ",
           "|_  ",
           " _) "],
 
-    "6": [" _  ",
+    '6': [" _  ",
           "|_  ",
           "|_) "],
 
-    "7": ["__  ",
+    '7': ["__  ",
           " /  ",
           "/   "],
 
-    "8": [" _  ",
+    '8': [" _  ",
           "(_) ",
           "(_) "],
 
-    "9": [" _  ",
+    '9': [" _  ",
           "(_| ",
           "  | "],
 
-    "0": [" _  ",
+    '0': [" _  ",
           "| | ",
           "|_| "],
 
-    ":": ["    ",
+    ':': ["    ",
           " o  ",
           " o  "],
 }
@@ -67,15 +66,18 @@ class Clock(threading.Thread):
         ts = time.strftime('%H:%M:%S')
 
         for n in xrange(3):
-            line = ''
-
             for i, char in enumerate(ts):
                 try:
-                    line += NUMBERS[char][n]
+                    line = NUMBERS[char][n]
                 except IndexError:
-                    pass
+                    continue
 
-            self.win.addstr(n, 0, line, style.attr('clock'))
+                if char == ':':
+                    attr = style.attr('clock_dots')
+                else:
+                    attr = style.attr('clock_number')
+
+                self.win.addstr(n, i * 4, line, attr)
         
         self.refresh()
 
