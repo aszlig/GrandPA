@@ -55,14 +55,20 @@ class Clock(threading.Thread):
     def __init__(self, win):
         threading.Thread.__init__(self)
         self.do_quit = threading.Event()
+        self.is_active = threading.Event()
+        self.sleeper = threading.Event()
         self.win = win
 
     def run(self):
         while not self.do_quit.isSet():
             self.update()
-            self.do_quit.wait(1)
+            self.sleeper.clear()
+            self.sleeper.wait(1)
 
     def update(self):
+        if not self.is_active.isSet():
+            return
+
         ts = time.strftime('%H:%M:%S')
 
         for n in xrange(3):
@@ -81,11 +87,25 @@ class Clock(threading.Thread):
         
         self.refresh()
 
-    def refresh(self):
+    def toggle(self):
+        """
+        Switch clock on/off
+        """
+        if self.is_active.isSet():
+            self.is_active.clear()
+            self.refresh(clear=True)
+        else:
+            self.is_active.set()
+            self.sleeper.set()
+
+    def refresh(self, clear=False):
         locking.refresh_lock.acquire()
+        if clear:
+            self.win.erase()
         self.win.refresh()
         locking.refresh_lock.release()
 
     def stop(self):
         self.do_quit.set()
+        self.sleeper.set()
         self.join()

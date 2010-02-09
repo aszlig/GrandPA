@@ -23,7 +23,7 @@ import Queue
 import rawkbd
 
 KEYMAP = {
-    'quit': 0x2d, # q
+    'quit':          0x2d, # q
 
     'select_all':    0x1e, # a
     'select_odd':    0x1f, # o
@@ -61,9 +61,11 @@ KEYMAP = {
     'list_pagedown': 0x6d, # page down
     'list_direct':   0x12, # .
 
-    'learn_speed': 0x0f, # tab
+    'learn_speed':   0x0f, # tab
 
-    'cancel_cmd': 0x01, # esc
+    'toggle_clock':  0x17, # c
+
+    'cancel_cmd':    0x01, # esc
 }
 
 class Keys(threading.Thread):
@@ -232,6 +234,8 @@ class Keys(threading.Thread):
                 reset = True
 
             # misc
+            elif self.pressed('toggle_clock'):
+                self.root.clock.toggle()
             elif self.pressed('cancel_cmd'):
                 if self.mod_ctrl:
                     self.unraw()
