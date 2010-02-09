@@ -52,7 +52,7 @@ class DistortedShutter(Chaser):
 
     def next(self):
         if self.i == 0:
-            sects = random.sample(xrange(self.sectlen), int(self.sectlen * 0.75))
+            sects = random.sample(xrange(self.sectlen), int(self.sectlen * 0.25))
             for n, s in enumerate(self.sections):
                 if n in sects:
                     s.color.alpha = 255
