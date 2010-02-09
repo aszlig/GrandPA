@@ -45,8 +45,9 @@ class Root(object):
         view_y, view_x = self.view_win.getparyx()
         view_max_y, view_max_x = self.view_win.getmaxyx()
 
+        # clock
         clock_win = self.view_win.derwin(3, 41, int(view_max_y / 2 - 1.5),
-                                         int(view_max_x / 2 - 20))
+                                         int(view_max_x / 2 - 15))
 
         self.clock = Clock(clock_win)
 
