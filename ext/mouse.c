@@ -29,7 +29,7 @@
 #define BUTTON2_RELEASED 16
 #define BUTTON3_RELEASED 32
 
-static PyObject *mouse_open(PyObject* self)
+static PyObject *mouse_open(PyObject *self)
 {
 	Gpm_Connect connection;
 	int ret;
@@ -146,14 +146,15 @@ static PyMethodDef mouse_methods[] = {
 	{"open", (PyCFunction)mouse_open, METH_NOARGS, "Connect to GPM."},
 	{"getpos", (PyCFunction)mouse_getpos, METH_KEYWORDS, mouse_getpos__doc__},
 	{"close", (PyCFunction)mouse_close, METH_NOARGS, "Close the connection to GPM."},
-	{NULL, NULL}
+	{NULL}
 };
 
 PyMODINIT_FUNC init_mouse(void)
 {
-	PyObject* module;
+	PyObject *module;
 
-	module = Py_InitModule("_mouse", mouse_methods);
+	if ((module = Py_InitModule("_mouse", mouse_methods)) == NULL)
+		return;
 
 	PyModule_AddIntConstant(module, "BUTTON1_PRESSED",  BUTTON1_PRESSED);
 	PyModule_AddIntConstant(module, "BUTTON2_PRESSED",  BUTTON2_PRESSED);
