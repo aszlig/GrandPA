@@ -39,10 +39,6 @@ class Blue(Color):
     label = 'Blue'
     code = (0, 0, 255)
 
-class Congo(Color):
-    label = 'Congo'
-    code = (50, 0, 74)
-
 class Cyan(Color):
     label = 'Cyan'
     code = (0, 255, 255)
@@ -54,6 +50,18 @@ class Pink(Color):
 class Yellow(Color):
     label = 'Yellow'
     code = (255, 255, 0)
+
+class Congo(Color):
+    label = 'Congo'
+    code = (167, 0, 255)
+
+class Coral(Color):
+    label = 'Coral'
+    code = (255, 127, 80)
+
+class MidnightBlue(Color):
+    label = 'Midnight blue'
+    code = (25, 25, 112)
 
 class White(Color):
     label = 'White'
