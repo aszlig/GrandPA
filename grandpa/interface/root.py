@@ -99,10 +99,14 @@ class Root(object):
     def getch(self):
         return self.win.getch()
 
-    def refresh(self):
+    def refresh(self, hard=False):
         locking.refresh_lock.acquire()
-        self.tavern.refresh()
-        self.status.refresh()
-        self.menu.refresh()
-        self.view_win.refresh()
+        self.tavern.refresh(hard=hard)
+        self.status.refresh(hard=hard)
+        self.menu.refresh(hard=hard)
+        if hard:
+            self.win.redrawwin()
+            self.view_win.redrawwin()
+        else:
+            self.view_win.refresh()
         locking.refresh_lock.release()

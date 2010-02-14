@@ -66,6 +66,8 @@ KEYMAP = {
     'toggle_clock':  0x17, # c
 
     'cancel_cmd':    0x01, # esc
+
+    'redraw':        0x19, # l
 }
 
 class Keys(threading.Thread):
@@ -236,6 +238,8 @@ class Keys(threading.Thread):
             # misc
             elif self.pressed('toggle_clock'):
                 self.root.clock.toggle()
+            elif self.pressed('redraw') and self.mod_ctrl:
+                self.root.refresh(hard=True)
             elif self.pressed('cancel_cmd'):
                 if self.mod_ctrl:
                     self.unraw()
@@ -248,7 +252,7 @@ class Keys(threading.Thread):
 
     def unraw(self):
         rawkbd.unraw()
-        self.root.refresh()
+        self.root.refresh(hard=True)
 
     def setselect(self, dimmer):
         for num in xrange(12):

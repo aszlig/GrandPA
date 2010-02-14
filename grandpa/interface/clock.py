@@ -98,11 +98,14 @@ class Clock(threading.Thread):
             self.is_active.set()
             self.sleeper.set()
 
-    def refresh(self, clear=False):
+    def refresh(self, clear=False, hard=False):
         locking.refresh_lock.acquire()
         if clear:
             self.win.erase()
-        self.win.refresh()
+        if hard:
+            self.win.redrawwin()
+        else:
+            self.win.refresh()
         locking.refresh_lock.release()
 
     def stop(self):

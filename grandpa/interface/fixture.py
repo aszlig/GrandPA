@@ -98,10 +98,13 @@ class Section(object):
 
         self.window.hline(0, 0, dimchar, self.length, attr)
 
-    def refresh(self):
+    def refresh(self, hard=False):
         locking.refresh_lock.acquire()
         self.update()
-        self.window.refresh()
+        if hard:
+            self.window.redrawwin()
+        else:
+            self.window.refresh()
         locking.refresh_lock.release()
 
 class Bar(object):
@@ -157,12 +160,15 @@ class Bar(object):
             self.win.addch(' ')
             self.win.attroff(attr)
 
-    def refresh(self):
+    def refresh(self, hard=False):
         locking.refresh_lock.acquire()
         self.update()
 
         for s in self.sections:
-            s.refresh()
+            s.refresh(hard=hard)
 
-        self.win.refresh()
+        if hard:
+            self.win.redrawwin()
+        else:
+            self.win.refresh()
         locking.refresh_lock.release()

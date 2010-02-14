@@ -81,8 +81,12 @@ class Fader(object):
 
         self.update_lock.release()
 
-    def refresh(self):
+    def refresh(self, hard=False):
         locking.refresh_lock.acquire()
-        self.outer.refresh()
-        self.fader.refresh()
+        if hard:
+            self.outer.redrawwin()
+            self.fader.redrawwin()
+        else:
+            self.outer.refresh()
+            self.fader.refresh()
         locking.refresh_lock.release()

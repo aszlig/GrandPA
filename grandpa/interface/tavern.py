@@ -36,10 +36,10 @@ class Tavern(object):
         bar = fixture.Bar(self.root, num, x, y, inverted)
         self.bars.append(bar)
 
-    def refresh(self):
+    def refresh(self, hard=False):
         locking.refresh_lock.acquire()
         for b in self.bars:
-            b.refresh()
+            b.refresh(hard=hard)
         locking.refresh_lock.release()
 
     def get_chaser_fixtures(self):

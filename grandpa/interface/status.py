@@ -77,7 +77,10 @@ class StatusLine(object):
         self.update()
         self.refresh()
 
-    def refresh(self):
+    def refresh(self, hard=False):
         locking.refresh_lock.acquire()
-        self.win.refresh()
+        if hard:
+            self.win.redrawwin()
+        else:
+            self.win.refresh()
         locking.refresh_lock.release()

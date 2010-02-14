@@ -206,8 +206,12 @@ class Menu(object):
             self.menu.addstr(n, 0, item)
             self.listlen
 
-    def refresh(self):
+    def refresh(self, hard=False):
         locking.refresh_lock.acquire()
-        self.outer.refresh()
-        self.menu.refresh()
+        if hard:
+            self.outer.redrawwin()
+            self.menu.redrawwin()
+        else:
+            self.outer.refresh()
+            self.menu.refresh()
         locking.refresh_lock.release()
