@@ -28,7 +28,7 @@ class StatusLine(object):
         self.width = win.getmaxyx()[1]
 
         self.cmd = ''
-        self.dmxerror = None
+        self.error = None
         self.stack = 0
 
         self.update_lock = threading.Lock()
@@ -38,7 +38,7 @@ class StatusLine(object):
     def update(self):
         self.update_lock.acquire()
 
-        if self.dmxerror is None:
+        if self.error is None:
             attr = style.attr('statusbar')
         else:
             attr = style.attr('statusbar_error')
@@ -52,8 +52,8 @@ class StatusLine(object):
             else:
                 line += "  %d " % (s+1)
 
-        if self.dmxerror is not None:
-            err = ' DMX Error: %s' % self.dmxerror
+        if self.error is not None:
+            err = ' Error: %s' % self.error
         else:
             err = ''
 
@@ -67,13 +67,13 @@ class StatusLine(object):
         self.stack = number
         self.update()
 
-    def reset_dmx_error(self):
-        self.dmxerror = None
+    def reset_error(self):
+        self.error = None
         self.update()
         self.refresh()
 
-    def set_dmx_error(self, msg):
-        self.dmxerror = msg
+    def set_error(self, msg):
+        self.error = msg
         self.update()
         self.refresh()
 

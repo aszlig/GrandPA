@@ -102,12 +102,12 @@ class Controller(threading.Thread):
         try:
             self.dmx = dmx.DMX('/dev/ttyUSB0')
         except dmx.DMXError, e:
-            self.root.status.set_dmx_error(e[0])
+            self.root.status.set_error(e[0])
             self.connected = False
             return
 
         self.connected = True
-        self.root.status.reset_dmx_error()
+        self.root.status.reset_error()
 
     def dmxout_single(self, addr, values):
         start = addr-1
@@ -124,7 +124,7 @@ class Controller(threading.Thread):
             try:
                 self.dmx.send(self.packet)
             except dmx.DMXError, e:
-                self.root.status.set_dmx_error(e[0])
+                self.root.status.set_error(e[0])
                 self.connected = False
 
         self.dmx_lock.release()

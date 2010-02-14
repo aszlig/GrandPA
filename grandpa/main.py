@@ -85,17 +85,29 @@ class Grandpa(object):
         root = interface.Root(scr, self.config)
         root.refresh()
 
-        keyhandler = inputdev.keys.Keys(root)
-        keyhandler.start()
+        try:
+            keyhandler = inputdev.keys.Keys(root)
+            keyhandler.start()
+        except:
+            root.stop()
+            raise
 
-        mousehandler = inputdev.mouse.Mouse(root.fader)
-        mousehandler.start()
+        try:
+            mousehandler = inputdev.mouse.Mouse(root.fader)
+        except Exception, e:
+            has_mouse = False
+            root.status.set_error(e[0])
+        else:
+            mousehandler.start()
+            has_mouse = True
 
         while keyhandler.is_active.get():
             root.refresh()
             keyhandler.is_active.task_done()
 
-        mousehandler.stop()
+        if has_mouse:
+            mousehandler.stop()
+
         root.stop()
 
     def startapp(self):
