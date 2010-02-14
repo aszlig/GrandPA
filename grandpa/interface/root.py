@@ -24,6 +24,7 @@ from tavern import Tavern
 from menu import Menu
 from fader import Fader
 from clock import Clock
+import fb
 
 from grandpa import locking
 
@@ -61,7 +62,13 @@ class Root(object):
         menu_win = win.derwin(menu_height, menu_width, 0, 0)
         self.menu = Menu(self, menu_win)
 
-        self.tavern = Tavern(self)
+        # tavern with bars
+        try:
+            fbdev = fb.Framebuffer(root_mx, root_my)
+        except Exception, e:
+            fbdev = None
+            self.status.set_error(e[0])
+        self.tavern = Tavern(self, fbdev)
         self.tavern.setstage(config['stage'])
         self.tavern.refresh()
 

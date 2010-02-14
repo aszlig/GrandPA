@@ -110,13 +110,16 @@ class Color(object):
     def __nonzero__(self):
         return self.__red > 0 or self.green > 0 or self.blue > 0
 
-    def _convert(self, converter, floats=False, alpha=False):
+    def _convert(self, converter, floats=False, alpha=False, use_alpha=None):
         chans = [self.__red, self.__green, self.__blue]
 
         if alpha:
             chans.append(self.__alpha)
         else:
             chans = [c / 255.0 * self.__alpha for c in chans]
+
+            if use_alpha is not None:
+                chans = [c / 255.0 * use_alpha for c in chans]
 
         if floats:
             chans = [c / 255.0 for c in chans]

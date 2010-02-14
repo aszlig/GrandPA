@@ -33,8 +33,13 @@ class Section(object):
         ' ', '+', '*', 'ACS_DIAMOND', 'ACS_BULLET', 'ACS_BOARD', 'ACS_PLUS', 'ACS_CKBOARD', 'ACS_LANTERN', 'ACS_BLOCK'
     ]
 
-    def __init__(self, window, length):
-        self.window = window
+    def __init__(self, length, sect=None, rect=None):
+        if sect is None and rect is None:
+            raise RuntimeError("Section was initialized without rect or sect")
+
+        self.sect = sect
+        self.rect = rect
+
         self.length = length
 
         self.selected = False
@@ -77,38 +82,49 @@ class Section(object):
 
     def update(self):
         self.dimmer_lock.acquire()
-        if self.dimmer is None:
-            dim = 0
-        else:
-            dim = int(max(self.color.to_tuple()) / 255.0
-                      * self.dimmer / 255.0 *
-                      len(self.dimchars))
+
+        if self.sect is not None:
+            if self.dimmer is None:
+                dim = 0
+            else:
+                dim = int(max(self.color.to_tuple()) / 255.0
+                          * self.dimmer / 255.0 *
+                          len(self.dimchars))
+
+            try:
+                dimchar = self.dimchars[dim]
+            except IndexError:
+                dimchar = self.dimchars[len(self.dimchars) - 1]
+
+            colname = self.color.get_name()
+            if colname is not None:
+                attr = style.attr('color_%s' % colname)
+            else:
+                attr = 0
+
+            self.sect.hline(0, 0, dimchar, self.length, attr)
+        elif self.rect is not None:
+            if self.dimmer is None:
+                dim = 0
+            else:
+                dim = self.dimmer
+            color = self.color.to_tuple(use_alpha=dim) 
+            self.rect.fill(*color)
+
         self.dimmer_lock.release()
-
-        try:
-            dimchar = self.dimchars[dim]
-        except IndexError:
-            dimchar = self.dimchars[len(self.dimchars) - 1]
-
-        colname = self.color.get_name()
-        if colname is not None:
-            attr = style.attr('color_%s' % colname)
-        else:
-            attr = 0
-
-        self.window.hline(0, 0, dimchar, self.length, attr)
 
     def refresh(self, hard=False):
         locking.refresh_lock.acquire()
         self.update()
-        if hard:
-            self.window.redrawwin()
-        else:
-            self.window.refresh()
+        if self.sect is not None:
+            if hard:
+                self.sect.redrawwin()
+            else:
+                self.sect.refresh()
         locking.refresh_lock.release()
 
 class Bar(object):
-    def __init__(self, root, number, x, y, inverted=False):
+    def __init__(self, root, number, x, y, inverted=False, fbdev=None):
         self.root = root
         self.selected = False
         self.inverted = inverted
@@ -118,10 +134,20 @@ class Bar(object):
 
         sectsize = root.BAR_LENGTH / 3
 
+        if fbdev is not None:
+            bar_y, bar_x = self.win.getbegyx()
+
         # initialize dimmer sections
         for s in xrange(3):
-            sect = self.win.derwin(1, sectsize + 1, 1, 1 + sectsize * s)
-            setattr(self, 'section%d' % (s + 1), Section(sect, sectsize))
+            if fbdev is None:
+                sect = self.win.derwin(1, sectsize + 1, 1, 1 + sectsize * s)
+                setattr(self, 'section%d' % (s + 1), Section(sectsize,
+                                                             sect=sect))
+            else:
+                rect = fbdev.newrect(bar_x + 1 + sectsize * s, bar_y + 1,
+                                     sectsize, 1)
+                setattr(self, 'section%d' % (s + 1), Section(sectsize,
+                                                             rect=rect))
 
         if self.inverted:
             self.sections = (self.section3, self.section2, self.section1)

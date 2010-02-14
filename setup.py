@@ -6,8 +6,8 @@ mouse = Extension('grandpa.inputdev.mouse',
                   libraries = ['gpm'],
                   sources = ['grandpa/inputdev/mouse.pyx'])
 
-fb = Extension('grandpa.interface._fb',
-               sources = ['ext/fb.c'])
+fb = Extension('grandpa.interface.fb',
+               sources = ['grandpa/interface/fb.pyx'])
 
 setup(name = 'GrandPA',
       version = '0.5',

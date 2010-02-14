@@ -26,14 +26,15 @@ from grandpa import locking
 import fixture
 
 class Tavern(object):
-    def __init__(self, root):
+    def __init__(self, root, fbdev=None):
         self.root = root
         self.bars = []
         self.selected = set()
+        self.fbdev = fbdev
 
     def newbar(self, x, y, inverted=False):
         num = len(self.bars) + 1
-        bar = fixture.Bar(self.root, num, x, y, inverted)
+        bar = fixture.Bar(self.root, num, x, y, inverted, self.fbdev)
         self.bars.append(bar)
 
     def refresh(self, hard=False):
