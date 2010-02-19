@@ -17,7 +17,7 @@
 
 import threading
 
-from grandpa import style
+import style
 
 from grandpa import locking
 

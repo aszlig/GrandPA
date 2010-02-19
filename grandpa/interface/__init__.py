@@ -15,4 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with GrandPA. If not, see <http://www.gnu.org/licenses/>.
 
-from ncurses.root import Root
+from grandpa import INTERFACE
+if INTERFACE == 'ncurses':
+    from ncurses.main import startup

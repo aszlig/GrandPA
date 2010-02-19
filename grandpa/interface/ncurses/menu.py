@@ -17,7 +17,7 @@
 
 import time
 
-from grandpa import style
+import style
 from grandpa.chaser import Chaser
 import grandpa.chasers
 

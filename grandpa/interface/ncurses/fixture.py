@@ -20,7 +20,7 @@ from functools import partial
 
 import curses
 
-from grandpa import style
+import style
 from grandpa.color import Color
 
 from grandpa import locking
