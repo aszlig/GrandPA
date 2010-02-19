@@ -32,7 +32,7 @@ class Root(object):
     # must be divisible by 3
     BAR_LENGTH = 39
 
-    def __init__(self, win, config):
+    def __init__(self, win, config, options):
         self.win = win
         self.config = config
 
@@ -63,11 +63,14 @@ class Root(object):
         self.menu = Menu(self, menu_win)
 
         # tavern with bars
-        try:
-            fbdev = fb.Framebuffer(root_mx, root_my)
-        except Exception, e:
+        if not options.no_fb:
+            try:
+                fbdev = fb.Framebuffer(root_mx, root_my)
+            except Exception, e:
+                fbdev = None
+                self.status.set_error(e[0])
+        else:
             fbdev = None
-            self.status.set_error(e[0])
         self.tavern = Tavern(self, fbdev)
         self.tavern.setstage(config['stage'])
         self.tavern.refresh()

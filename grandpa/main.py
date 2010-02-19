@@ -47,6 +47,10 @@ class Grandpa(object):
                      dest='logfile', default=self.DEFAULT_LOGFILE,
                      help="The logfile, default: %default")
 
+        p.add_option('-n', '--no-fb', action='store_true',
+                     dest='no_fb', default=False,
+                     help="Disable framebuffer rendering. (ncurses only)")
+
         options, args = p.parse_args()
 
         # create base directory
@@ -58,7 +62,8 @@ class Grandpa(object):
         self.init_logging(options.logfile)
         self.init_config(options.cfgfile)
 
-        interface.startup(self.config)
+        # TODO: write a configuration class!
+        interface.startup(self.config, options)
 
     def init_logging(self, logfile):
         logging.basicConfig(level=logging.DEBUG,
