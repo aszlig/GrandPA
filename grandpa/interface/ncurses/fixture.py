@@ -6,12 +6,12 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # LastWatch is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with GrandPA. If not, see <http://www.gnu.org/licenses/>.
 
@@ -108,7 +108,7 @@ class Section(object):
                 dim = 0
             else:
                 dim = self.dimmer
-            color = self.color.to_tuple(use_alpha=dim) 
+            color = self.color.to_tuple(use_alpha=dim)
             self.rect.fill(*color)
 
         self.dimmer_lock.release()
