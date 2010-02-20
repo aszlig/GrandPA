@@ -96,6 +96,29 @@ class Root(pyglet.window.Window):
             self.angle += (dt * 80)
             self.angle %= 360
 
+        # FIXME: remove this ugly test effect ;-)
+        pos1 = getattr(self, 'pos1', 0)
+        pos2 = getattr(self, 'pos2', 0)
+        for i, bar in enumerate(self.bars):
+            for j, color in enumerate(bar.colors):
+                if ((i+1) * 3 + (j+1)) % 6 == int(pos1):
+                    bar.colors[j] = [0.0, 1.0, 1.0]
+                elif ((i+1) * 3 + (j+1)) % 9 == int(pos2):
+                    bar.colors[j] = [1.0, 0.0, 0.0]
+                else:
+                    bar.colors[j] = [0.0, 0.0, 1.0]
+        pos1 += dt * 10
+        if pos1 >= 6:
+            pos1 = 0
+
+        self.pos1 = pos1
+
+        pos2 += dt * 23
+        if pos2 >= 6:
+            pos2 = 0
+
+        self.pos2 = pos2
+
     def on_resize(self, width, height):
         glViewport(0, 0, width, height)
         glMatrixMode(GL_PROJECTION)
