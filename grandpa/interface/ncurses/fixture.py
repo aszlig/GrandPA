@@ -33,12 +33,14 @@ class Section(object):
         ' ', '+', '*', 'ACS_DIAMOND', 'ACS_BULLET', 'ACS_BOARD', 'ACS_PLUS', 'ACS_CKBOARD', 'ACS_LANTERN', 'ACS_BLOCK'
     ]
 
-    def __init__(self, length, sect=None, rect=None):
+    def __init__(self, length, sect=None, rect=None, bar=None):
         if sect is None and rect is None:
             raise RuntimeError("Section was initialized without rect or sect")
 
         self.sect = sect
         self.rect = rect
+
+        self.bar = bar
 
         self.length = length
 
@@ -141,12 +143,12 @@ class Bar(object):
         for s in xrange(3):
             if fbdev is None:
                 sect = self.win.derwin(1, sectsize + 1, 1, 1 + sectsize * s)
-                setattr(self, 'section%d' % (s + 1), Section(sectsize,
+                setattr(self, 'section%d' % (s + 1), Section(sectsize, bar=self,
                                                              sect=sect))
             else:
                 rect = fbdev.newrect(bar_x + 1 + sectsize * s, bar_y + 1,
                                      sectsize, 1)
-                setattr(self, 'section%d' % (s + 1), Section(sectsize,
+                setattr(self, 'section%d' % (s + 1), Section(sectsize, bar=self,
                                                              rect=rect))
 
         if self.inverted:

@@ -62,6 +62,7 @@ KEYMAP = {
     'list_direct':   0x12, # .
 
     'learn_speed':   0x0f, # tab
+    'switch_fader':  0x15, # f
 
     'toggle_clock':  0x17, # c
 
@@ -236,6 +237,8 @@ class Keys(threading.Thread):
                 reset = True
 
             # misc
+            elif self.pressed('switch_fader'):
+                self.root.fadectrl.switch_fader()
             elif self.pressed('toggle_clock'):
                 self.root.clock.toggle()
             elif self.pressed('redraw') and self.mod_ctrl:
@@ -266,15 +269,26 @@ class Keys(threading.Thread):
         Set dimmer to fader value or zero for a particular dimmer setting.
         """
         if active:
-            value = self.root.fader.faderval
+            value = self.root.dimfader.faderval
         else:
             value = None
 
-        f = lambda x: setattr(x, 'dimmer', value)
+        dd = None
+        if self.root.ftfader.faderval > 0:
+            dd = self.root.tavern.spawn_dyndim(to=value,
+                                               speed=self.root.ftfader.faderval,
+                                               controller=self.root.controller)
+            f = lambda x: dd.add_sect(x)
+        else:
+            f = lambda x: setattr(x, 'dimmer', value)
+
         self.root.tavern.set_selection_struct(self.selects[self.cur][dimmer],
                                               sectfun=f, barfun=f)
 
-        self.root.controller.dim_update()
+        if dd is not None:
+            dd.start()
+        else:
+            self.root.controller.dim_update()
 
     def saveflash(self, dimmer):
         """

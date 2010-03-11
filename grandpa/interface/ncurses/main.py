@@ -43,7 +43,7 @@ def curses_wrapper(scr, config, options):
         raise
 
     try:
-        mousehandler = mouse.Mouse(root.fader)
+        mousehandler = mouse.Mouse(root.fadectrl)
     except Exception, e:
         has_mouse = False
         root.status.set_error(e[0])
