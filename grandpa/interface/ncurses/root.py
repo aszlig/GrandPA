@@ -63,7 +63,7 @@ class Root(object):
         self.menu = Menu(self, menu_win)
 
         # tavern with bars
-        if not options.no_fb:
+        if options.framebuffer:
             try:
                 fbdev = fb.Framebuffer(root_mx, root_my)
             except Exception, e:

@@ -47,9 +47,9 @@ class Grandpa(object):
                      dest='logfile', default=self.DEFAULT_LOGFILE,
                      help="The logfile, default: %default")
 
-        p.add_option('-n', '--no-fb', action='store_true',
-                     dest='no_fb', default=False,
-                     help="Disable framebuffer rendering. (ncurses only)")
+        p.add_option('-f', '--framebuffer', action='store_true',
+                     dest='framebuffer', default=False,
+                     help="Enable framebuffer rendering. (VT only)")
 
         options, args = p.parse_args()
 
