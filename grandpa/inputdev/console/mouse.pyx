@@ -63,7 +63,7 @@ cdef extern from "gpm.h":
 
     int Gpm_Open(Gpm_Connect*, int)
     int Gpm_Close()
-    int Gpm_GetEvent(Gpm_Event*)
+    int Gpm_GetEvent(Gpm_Event*) with gil
 
     int gpm_fd
 
@@ -127,7 +127,8 @@ class Mouse(threading.Thread):
             elif result == 0:
                 return None
 
-        event = Gpm_GetEvent(&ev)
+        with nogil:
+            event = Gpm_GetEvent(&ev)
 
         if event <= 0:
             raise OSError("Cannot get GPM event.")
