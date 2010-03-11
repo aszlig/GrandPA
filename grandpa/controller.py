@@ -44,6 +44,8 @@ class Controller(threading.Thread):
         self.chasers = {}
         self.bars = []
 
+        self.dyndims = []
+
         self.connected = False
 
         self.packet = [0] * 512
@@ -177,5 +179,9 @@ class Controller(threading.Thread):
             c = self.chasers.get(chaser)
             c.stop()
             c.join()
+
+        for dyndim in self.dyndims:
+            dyndim.stop()
+            dyndim.join()
 
         self.chasers = {}

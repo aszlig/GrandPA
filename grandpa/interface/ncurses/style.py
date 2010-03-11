@@ -89,6 +89,10 @@ class Default(Style):
     list_active_normal    = Attr(curses.COLOR_YELLOW, attr=curses.A_BOLD)
     list_active_highlight = Attr(curses.COLOR_YELLOW, curses.COLOR_GREEN,  curses.A_BOLD)
 
+    # fader box
+    fader_active          = Attr(curses.COLOR_RED,    attr=curses.A_BOLD)
+    fader_inactive        = Attr(curses.COLOR_RED)
+
     # obvious ;-)
     clock_number          = Attr(curses.COLOR_CYAN,   attr=curses.A_BOLD)
     clock_dots            = Attr(curses.COLOR_CYAN)

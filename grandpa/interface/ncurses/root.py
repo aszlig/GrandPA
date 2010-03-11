@@ -22,7 +22,7 @@ from grandpa import controller
 from status import StatusLine
 from tavern import Tavern
 from menu import Menu
-from fader import Fader
+from fader import FadeControl, DimmerFader, FadetimeFader
 from clock import Clock
 import fb
 
@@ -75,13 +75,25 @@ class Root(object):
         self.tavern.setstage(config['stage'])
         self.tavern.refresh()
 
-        # dimmer fader
+        # all faders
         fader_width = 3
         fader_height = root_my - menu_height - 1
-        fader_x = root_mx - 3
         fader_y = menu_height
-        fader_win = win.derwin(fader_height, fader_width, fader_y, fader_x)
-        self.fader = Fader(self, fader_win)
+
+        self.fadectrl = FadeControl()
+
+        # dimmer fader
+        fader1_x = root_mx - 3
+        fader1_win = win.derwin(fader_height, fader_width, fader_y, fader1_x)
+        self.dimfader = DimmerFader(self, fader1_win)
+
+        # fadetime fader
+        fader2_x = root_mx - 6
+        fader2_win = win.derwin(fader_height, fader_width, fader_y, fader2_x)
+        self.ftfader = FadetimeFader(self, fader2_win)
+
+        self.fadectrl.add_fader(self.dimfader)
+        self.fadectrl.add_fader(self.ftfader)
 
         self.controller.start()
         self.clock.start()

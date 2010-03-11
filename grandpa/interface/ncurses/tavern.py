@@ -21,6 +21,7 @@ any window itself, but updates the bars.
 """
 
 from grandpa import stage
+from grandpa import dyndim
 from grandpa import locking
 
 import fixture
@@ -106,6 +107,9 @@ class Tavern(object):
                 if s.dimmer is not None:
                     s.dimmer = value
                     s.refresh()
+
+    def spawn_dyndim(self, *args, **kwargs):
+        return dyndim.DynamicDimmer(*args, **kwargs)
 
     def get_bar(self, number):
         """

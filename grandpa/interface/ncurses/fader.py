@@ -18,28 +18,85 @@
 import threading
 import curses
 
+import style
+
 from grandpa import locking
+
+class FadeControl(object):
+    def __init__(self):
+        self.faders = []
+        self.active_fader = None
+
+    def add_fader(self, fader):
+        self.faders.append(fader)
+
+        if len(self.faders) == 1:
+            self.switch_fader()
+
+    def switch_fader(self):
+        try:
+            self.active_fader.deactivate()
+        except AttributeError:
+            pass
+
+        try:
+            i = self.faders.index(self.active_fader)
+            self.active_fader = self.faders[i+1]
+        except (ValueError, IndexError):
+            self.active_fader = self.faders[0]
+
+        self.active_fader.activate()
+
+    def set(self, value):
+        if self.active_fader is None:
+            return
+        self.active_fader.set(value)
+
+    def adjust(self, value):
+        if self.active_fader is None:
+            return
+        self.active_fader.adjust(value)
 
 class Fader(object):
     def __init__(self, root, window):
         self.root = root
 
+        self.is_active = False
+
         self.outer = window
-        self.outer.box()
+        self.draw_box()
 
         y, x = self.outer.getmaxyx()
         inner = self.outer.derwin(y - 2, x - 2, 1, 1)
         self.fader = inner
         self.faderlen = y
 
-        self.faderval = 255
-
-        self.dyndims = []
+        self.faderval = self.startval
 
         self.update_lock = threading.RLock()
         self.update()
 
         self.refresh()
+
+    def activate(self):
+        self.is_active = True
+        self.draw_box()
+        self.refresh()
+
+    def deactivate(self):
+        self.is_active = False
+        self.draw_box()
+        self.refresh()
+
+    def draw_box(self):
+        if self.is_active:
+            attr = style.attr('fader_active')
+        else:
+            attr = style.attr('fader_inactive')
+
+        self.outer.attron(attr)
+        self.outer.box()
+        self.outer.attroff(attr)
 
     def _correct(self):
         if self.faderval > 255:
@@ -76,8 +133,8 @@ class Fader(object):
         self.fader.refresh()
         locking.refresh_lock.release()
 
-        self.root.tavern.update_dyndimmer(self.faderval)
-        self.root.controller.dim_update()
+        if hasattr(self, 'set_faderval'):
+            self.set_faderval(self.faderval)
 
         self.update_lock.release()
 
@@ -90,3 +147,13 @@ class Fader(object):
             self.outer.refresh()
             self.fader.refresh()
         locking.refresh_lock.release()
+
+class DimmerFader(Fader):
+    startval = 255
+
+    def set_faderval(self, value):
+        self.root.tavern.update_dyndimmer(self.faderval)
+        self.root.controller.dim_update()
+
+class FadetimeFader(Fader):
+    startval = 0
