@@ -47,7 +47,7 @@ class Chaser(threading.Thread):
         self.last_wait = None
 
         if self.sectlen == 0:
-            self.quit.set()
+            self.end_chaser()
 
     def init_sections(self):
         self.all_sections = fixture.Section(None, None)
@@ -133,6 +133,10 @@ class Chaser(threading.Thread):
         self.speed = speed
         self.restart_event.set()
         self.notify.set()
+
+    def end_chaser(self):
+        self.queue.put(('quit', self.__class__))
+        self.quit.set()
 
     def stop(self):
         self.quit.set()

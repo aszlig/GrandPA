@@ -90,7 +90,7 @@ class Menu(object):
 
         self.update()
 
-    def fail_chaser(self, chaser):
+    def remove_chaser(self, chaser):
         try:
             self.active_chasers.remove(chaser)
         except ValueError:
