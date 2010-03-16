@@ -258,7 +258,7 @@ class Keys(threading.Thread):
         self.root.refresh(hard=True)
 
     def setselect(self, dimmer):
-        for num in xrange(12):
+        for num in xrange(len(self.root.tavern.bars)):
             for sect in xrange(3):
                 self.root.tavern.deactivate_bar(num, sect)
 
