@@ -44,7 +44,7 @@ class DynamicDimmer(threading.Thread):
             if percent > 1:
                 first_refresh = True
             self.controller.dim_update()
-            self.quit_event.wait(0.1 * (1.0 / 255.0 * self.dim_speed))
+            self.quit_event.wait(0.1 / 255.0 * self.dim_speed)
             if self.quit_event.isSet():
                 return
 
