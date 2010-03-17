@@ -64,6 +64,8 @@ KEYMAP = {
     'learn_speed':   0x0f, # tab
     'switch_fader':  0x15, # f
 
+    'record_chaser': 0x18, # r
+
     'toggle_clock':  0x17, # c
 
     'cancel_cmd':    0x01, # esc
@@ -76,6 +78,8 @@ class Keys(threading.Thread):
         threading.Thread.__init__(self)
         self.is_active = Queue.Queue()
         self.root = root
+
+        self.effect = None
 
     def run(self):
         try:
@@ -215,6 +219,10 @@ class Keys(threading.Thread):
                 self.root.menu.select(int(buf))
                 reset = True
 
+            # effects engine
+            elif self.pressed('record_chaser'):
+                self.record_chaser()
+
             # selector
             elif self.pressed('select_direct'):
                 num = KEYMAP['select_direct'].index(self.keycode)
@@ -263,6 +271,9 @@ class Keys(threading.Thread):
                 self.root.tavern.deactivate_bar(num, sect)
 
         self.root.tavern.set_selection_struct(self.selects[self.cur][dimmer])
+
+    def record_chaser(self):
+        self.root.tavern.record_chaser()
 
     def setflash(self, dimmer, active):
         """

@@ -22,6 +22,7 @@ any window itself, but updates the bars.
 
 from grandpa import stage
 from grandpa import dyndim
+from grandpa import effects
 from grandpa import locking
 
 import fixture
@@ -32,6 +33,8 @@ class Tavern(object):
         self.bars = []
         self.selected = set()
         self.fbdev = fbdev
+
+        self.recorder = None
 
     def newbar(self, x, y, inverted=False):
         num = len(self.bars) + 1
@@ -44,10 +47,15 @@ class Tavern(object):
             b.refresh(hard=hard)
         locking.refresh_lock.release()
 
+    def record_chaser(self):
+        fixtures = self.get_chaser_fixtures()
+        self.recorder = effects.Recorder(fixtures)
+
     def get_chaser_fixtures(self):
         """
         Get all sections currently selected and return a fixture list.
         """
+        # FIXME: WTF is this UNUSED? O_o
         fixtures = []
 
         for b in self.bars:
