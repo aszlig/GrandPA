@@ -220,8 +220,8 @@ class Keys(threading.Thread):
                 reset = True
 
             # effects engine
-            elif self.pressed('record_chaser'):
-                self.record_chaser()
+            #elif self.pressed('record_chaser'):
+            #    self.record_chaser()
 
             # selector
             elif self.pressed('select_direct'):
