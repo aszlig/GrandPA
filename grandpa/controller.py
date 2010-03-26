@@ -148,10 +148,10 @@ class Controller(threading.Thread):
                 continue
 
             if addr == 'exception':
-                self.chasers.pop(values)
+                self.remove_chaser(values)
                 self.root.menu.remove_chaser(values)
             elif addr == 'quit':
-                self.chasers.pop(values)
+                self.remove_chaser(values)
                 self.root.menu.remove_chaser(values)
             elif addr is None:
                 for bar in self.bars:
