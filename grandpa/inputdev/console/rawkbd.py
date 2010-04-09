@@ -50,8 +50,8 @@ def set_raw_kbd():
                     termios.ISIG | termios.XCASE)
 
     # unset control characters and buffering of them
-    newterm[6][termios.VMIN] = 0;
-    newterm[6][termios.VTIME] = 0;
+    newterm[6][termios.VMIN] = 0
+    newterm[6][termios.VTIME] = 0
 
     termios.tcsetattr(sys.stdin.fileno(), termios.TCSANOW, newterm)
 
