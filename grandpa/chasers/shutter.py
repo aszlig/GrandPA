@@ -66,3 +66,33 @@ class DistortedShutter(Chaser):
         self.i += 1
         if self.i >= 10:
             self.i = 0
+
+class ChainShutter(Chaser):
+    label = 'Chain shutter'
+    chains = 3
+
+    def setup(self):
+        self.i = 0
+        self.siterator = self.sectiter()
+
+    def restart(self):
+        self.i = 0
+
+    def sectiter(self):
+        while True:
+            for i in xrange(int(self.sectlen / 3)):
+                cur = i * 3
+                yield self.sections[cur:cur+3]
+
+    def next(self):
+        if self.i <= self.chains:
+            for s in self.siterator.next():
+                s.color.alpha = 255
+        else:
+            self.all_sections.color.alpha = 0
+
+        self.wait(0.3, frames=10)
+
+        self.i += 1
+        if self.i >= 10:
+            self.i = 0
