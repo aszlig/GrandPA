@@ -85,7 +85,7 @@ class ChainShutter(Chaser):
                 yield self.sections[cur:cur+3]
 
     def next(self):
-        if self.i <= self.chains:
+        if self.i < self.chains:
             for s in self.siterator.next():
                 s.color.alpha = 255
         else:
