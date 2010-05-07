@@ -109,17 +109,17 @@ class Keys(threading.Thread):
         return self.pressed(mapkey, self.keycode - 0x80)
 
     def process_modifiers(self):
-        if self.keycode == 0x2a:
+        if self.keycode in (0x2a, 0x36):
             self.mod_shift = True
-        elif self.keycode == 0xaa:
+        elif self.keycode in (0xaa, 0xb6):
             self.mod_shift = False
-        elif self.keycode == 0x1d:
+        elif self.keycode in (0x1d, 0x61):
             self.mod_ctrl = True
-        elif self.keycode == 0x9d:
+        elif self.keycode in (0x9d, 0xe1):
             self.mod_ctrl = False
-        elif self.keycode == 0x38:
+        elif self.keycode in (0x38, 0x64):
             self.mod_meta = True
-        elif self.keycode == 0xb8:
+        elif self.keycode in (0xb8, 0xe4):
             self.mod_meta = False
 
     def init_selects(self):
