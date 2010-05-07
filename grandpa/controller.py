@@ -61,7 +61,7 @@ class Controller(threading.Thread):
 
     def superstrobe(self, activate=True):
         if activate:
-            strobe = 255
+            strobe = 220
         else:
             strobe = 0
 
