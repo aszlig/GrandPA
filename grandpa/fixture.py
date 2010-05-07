@@ -35,6 +35,7 @@ class Bar(object):
         self.fixtype = fixtype
 
         self.sections = [Section(self, s) for s in sections]
+        self._strobe = 0
 
     def make_colors(self):
         colors = []
@@ -56,14 +57,20 @@ class Bar(object):
             s.visual.dimmer_lock.release()
         return colors
 
+    def set_strobe(self, value):
+        self._strobe = value
+
+    def get_strobe(self):
+        return self._strobe
+
     def dmxout(self):
         colors = self.make_colors()
         if self.fixtype == 'eurolite':
             # ctrl, dimmer, shutter
-            values = [10, 255, 0] + colors
+            values = [10, 255, self.get_strobe()] + colors
         elif self.fixtype == 'americandj':
             # shutter, dimmer
-            values = colors + [0, 255]
+            values = colors + [self.get_strobe(), 255]
         elif self.fixtype == 'test':
             # my moving head for testing the dmx controller
             values = [0, 0, 0, 0, 0, 255] + colors[:3] + [0, 0, 0, 0]

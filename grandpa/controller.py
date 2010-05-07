@@ -59,6 +59,17 @@ class Controller(threading.Thread):
     def dim_update(self):
         self.queue.put((None, None))
 
+    def superstrobe(self, activate=True):
+        if activate:
+            strobe = 255
+        else:
+            strobe = 0
+
+        for b in self.bars:
+            b.set_strobe(strobe)
+
+        self.queue.put((None, None))
+
     def selection2sections(self, selection):
         sects = []
 

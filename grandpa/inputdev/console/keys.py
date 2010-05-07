@@ -64,6 +64,7 @@ KEYMAP = {
     'learn_speed':   0x0f, # tab
     'switch_fader':  0x15, # f
 
+    'superstrobe':   0x0e, # backspace
     'record_chaser': 0x18, # r
 
     'toggle_clock':  0x17, # c
@@ -197,6 +198,16 @@ class Keys(threading.Thread):
                 if self.pressed(skey):
                     self.setstack(self.stacks[skey])
                     continue
+
+            # superstrobe
+            if self.pressed('superstrobe'):
+                self.root.tavern.set_full_dimmer(255)
+                self.root.controller.superstrobe(True)
+                continue
+            elif self.released('superstrobe'):
+                self.root.tavern.set_full_dimmer(None)
+                self.root.controller.superstrobe(False)
+                continue
 
             # menu
             if self.pressed('list_activate'):
