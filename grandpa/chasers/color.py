@@ -15,7 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with GrandPA. If not, see <http://www.gnu.org/licenses/>.
 
+import random
+
 from grandpa.chaser import Chaser
+from grandpa.color import Color as BaseColor
 
 class Color(Chaser):
     is_cue = True
@@ -59,6 +62,10 @@ class Coral(Color):
     label = 'Coral'
     code = (255, 127, 80)
 
+class Orange(Color):
+    label = 'Orange'
+    code = (255, 127, 0)
+
 class MidnightBlue(Color):
     label = 'Midnight blue'
     code = (25, 25, 112)
@@ -66,3 +73,52 @@ class MidnightBlue(Color):
 class White(Color):
     label = 'White'
     code = (255, 255, 255)
+
+class DistortedColorFade(Chaser):
+    label = 'Distorted color fade'
+    frames = 1
+
+    def setup(self):
+        self.step = int(255.0 / self.frames)
+        self.jumper = iter(self.sectionjump())
+
+    def sectionjump(self):
+        while True:
+            for s in self.sections:
+                red   = random.randint(0, 255)
+                green = random.randint(0, 255)
+                blue  = random.randint(0, 255)
+
+                s.color.set_channels(red, green, blue)
+            yield
+
+    def next(self):
+        self.jumper.next()
+        self.wait(0.5, frames=self.frames)
+
+class SwapBlue(Chaser):
+    label = 'Swap blue'
+    frames = 1
+
+    def setup(self):
+        self.step = int(255.0 / self.frames)
+        self.jumper = iter(self.sectionjump())
+        self.active = False
+        self.initial = self.sections[0].color.copy()
+
+    def sectionjump(self):
+        while True:
+            self.active = not self.active
+
+            if self.active:
+                color = BaseColor(0, 0, 255)
+            else:
+                color = self.initial
+
+            for s in self.sections:
+                s.color.set_color(color)
+            yield
+
+    def next(self):
+        self.jumper.next()
+        self.wait(0.5, frames=self.frames)
