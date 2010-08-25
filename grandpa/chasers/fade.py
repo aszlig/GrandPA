@@ -22,7 +22,7 @@ from grandpa.chaser import Chaser
 class SimpleFade(Chaser):
     label = 'Simple section fade'
     frames = 30
-    length = 8
+    length = 16
 
     def setup(self):
         self.jumper = iter(self.sectionjump())
