@@ -52,6 +52,8 @@ KEYMAP = {
         0x06, 0x07, 0x08, 0x09, 0x0a,
     ],
 
+    'reset_chasers': 0x3a, # caps lock
+
     'list_activate': 0x1c, # enter
     'list_up':       0x67, # up
     'list_down':     0x6c, # down
@@ -229,6 +231,8 @@ class Keys(threading.Thread):
             elif self.pressed('list_direct') and len(buf) > 0:
                 self.root.menu.select(int(buf))
                 reset = True
+            elif self.pressed('reset_chasers'):
+                self.root.menu.reset()
 
             # effects engine
             #elif self.pressed('record_chaser'):

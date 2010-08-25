@@ -70,6 +70,10 @@ class Controller(threading.Thread):
 
         self.queue.put((None, None))
 
+    def set_fullbright(self):
+        for b in self.bars:
+            b.set_fullbright()
+
     def selection2sections(self, selection):
         sects = []
 

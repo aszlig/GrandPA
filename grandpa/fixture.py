@@ -63,6 +63,12 @@ class Bar(object):
     def get_strobe(self):
         return self._strobe
 
+    def set_fullbright(self):
+        for s in self.sections:
+            s.visual.dimmer_lock.acquire()
+            s.color.alpha = 255
+            s.visual.dimmer_lock.release()
+
     def dmxout(self):
         colors = self.make_colors()
         if self.fixtype == 'eurolite':

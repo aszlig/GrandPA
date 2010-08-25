@@ -97,6 +97,18 @@ class Menu(object):
             pass
         self.update()
 
+    def reset(self):
+        """
+        Stop all chasers and set colors to full brightness.
+        """
+        self.root.controller.set_fullbright()
+
+        while len(self.active_chasers):
+            chaser = self.active_chasers.pop()
+            self.root.controller.remove_chaser(chaser)
+
+        self.update()
+
     def learn_speed(self):
         curtime = time.time()
 
