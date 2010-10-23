@@ -46,6 +46,10 @@ class Cyan(Color):
     label = 'Cyan'
     code = (0, 255, 255)
 
+class Magenta(Color):
+    label = 'Magenta'
+    code = (255, 0, 127)
+
 class Pink(Color):
     label = 'Pink'
     code = (255, 0, 255)
