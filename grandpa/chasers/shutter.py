@@ -96,3 +96,26 @@ class ChainShutter(Chaser):
         self.i += 1
         if self.i >= 10:
             self.i = 0
+
+class Jump(Chaser):
+    label = 'Jump'
+    chains = 7
+
+    def setup(self):
+        self.i = 0
+
+    def restart(self):
+        self.i = 0
+
+    def next(self):
+        for i in xrange(len(self.sections)):
+            if (i - self.i) % self.chains == 0:
+                self.sections[i].color.alpha = 255
+            else:
+                self.sections[i].color.alpha = 0
+
+        self.wait(0.3, frames=1)
+
+        self.i += 1
+        if self.i >= self.chains:
+            self.i = 0
