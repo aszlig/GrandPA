@@ -47,5 +47,12 @@ class DMX(object):
 
         self.device.write(''.join([chr(c) for c in data]))
 
+    def send_to(self, startaddr, packet):
+        """
+        Send a packet to the specified startaddr and fill up to 512 bytes.
+        """
+        pack = [0] * startaddr + packet + [0] * (512 - len(packet) - startaddr)
+        return self.send(pack)
+
     def close(self):
         self.device.close()
