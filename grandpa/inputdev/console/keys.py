@@ -52,7 +52,7 @@ KEYMAP = {
         0x06, 0x07, 0x08, 0x09, 0x0a,
     ],
 
-    'reset_chasers': 0x3a, # caps lock
+    'reset_chasers': 0x6f, # delete
 
     'list_activate': 0x1c, # enter
     'list_up':       0x67, # up
