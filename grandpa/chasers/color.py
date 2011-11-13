@@ -20,63 +20,78 @@ import random
 from grandpa.chaser import Chaser
 from grandpa.color import Color as BaseColor
 
+
 class Color(Chaser):
     is_cue = True
 
     def next(self):
         self.all_sections.color.set_channels(*self.code)
 
+
 class Blackout(Color):
     label = 'Blackout'
     code = (0, 0, 0)
+
 
 class Red(Color):
     label = 'Red'
     code = (255, 0, 0)
 
+
 class Green(Color):
     label = 'Green'
     code = (0, 255, 0)
+
 
 class Blue(Color):
     label = 'Blue'
     code = (0, 0, 255)
 
+
 class Cyan(Color):
     label = 'Cyan'
     code = (0, 255, 255)
+
 
 class Magenta(Color):
     label = 'Magenta'
     code = (255, 0, 127)
 
+
 class Pink(Color):
     label = 'Pink'
     code = (255, 0, 255)
+
 
 class Yellow(Color):
     label = 'Yellow'
     code = (255, 255, 0)
 
+
 class Congo(Color):
     label = 'Congo'
     code = (167, 0, 255)
+
 
 class Coral(Color):
     label = 'Coral'
     code = (255, 127, 80)
 
+
 class Orange(Color):
     label = 'Orange'
     code = (255, 127, 0)
+
 
 class MidnightBlue(Color):
     label = 'Midnight blue'
     code = (25, 25, 112)
 
+
 class White(Color):
     label = 'White'
     code = (255, 255, 255)
+
 
 class DistortedColorFade(Chaser):
     label = 'Distorted color fade'
@@ -89,9 +104,9 @@ class DistortedColorFade(Chaser):
     def sectionjump(self):
         while True:
             for s in self.sections:
-                red   = random.randint(0, 255)
+                red = random.randint(0, 255)
                 green = random.randint(0, 255)
-                blue  = random.randint(0, 255)
+                blue = random.randint(0, 255)
 
                 s.color.set_channels(red, green, blue)
             yield
@@ -99,6 +114,7 @@ class DistortedColorFade(Chaser):
     def next(self):
         self.jumper.next()
         self.wait(0.5, frames=self.frames)
+
 
 class SwapBlue(Chaser):
     label = 'Swap blue'

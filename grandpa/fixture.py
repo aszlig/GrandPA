@@ -18,6 +18,7 @@
 import math
 from grandpa.color import Color
 
+
 class Section(object):
     def __init__(self, bar, visual):
         self.bar = bar
@@ -28,6 +29,7 @@ class Section(object):
 
     def has_changed(self):
         return self.color.has_changed
+
 
 class Bar(object):
     def __init__(self, addr, fixtype, sections):

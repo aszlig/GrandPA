@@ -18,6 +18,7 @@
 import random
 from pyglet.gl import *
 
+
 class Bar(object):
     SECTIONS = 3
 
@@ -68,7 +69,9 @@ class Bar(object):
 
         if color is not None:
             glColor3f(*color)
-            #glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, (GLfloat * 4)(*color))
+            #glMaterialfv(GL_FRONT_AND_BACK,
+            #             GL_EMISSION,
+            #             (GLfloat * 4)(*color))
 
         glPushClientAttrib(GL_CLIENT_VERTEX_ARRAY_BIT)
         glEnableClientState(GL_VERTEX_ARRAY)
@@ -89,7 +92,7 @@ class Bar(object):
         for i in xrange(self.SECTIONS):
 
             sect_x_neg = -width + barlen / self.SECTIONS * i
-            sect_x_pos = -width + barlen / self.SECTIONS * (i+1)
+            sect_x_pos = -width + barlen / self.SECTIONS * (i + 1)
 
             vertices = [
                 sect_x_neg+x, -height+y,  height+z,
@@ -114,7 +117,9 @@ class Bar(object):
         glCallList(self.bar_dlist)
 
         for i, sect in enumerate(self.sections):
-            #glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, (GLfloat * 4)(*(self.colors[i])))
+            #glMaterialfv(GL_FRONT_AND_BACK,
+            #             GL_EMISSION,
+            #             (GLfloat * 4)(*(self.colors[i])))
 
             glColor3f(*(self.colors[i]))
             glCallList(sect)

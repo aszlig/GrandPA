@@ -23,6 +23,7 @@ KEYMAP = {
     (key.MOD_CTRL, key.M): 'toggle_mousegrab',
 }
 
+
 class Keys(object):
     def __init__(self, root):
         self.root = root

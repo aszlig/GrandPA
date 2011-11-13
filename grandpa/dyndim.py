@@ -1,6 +1,7 @@
 import time
 import threading
 
+
 class DynamicDimmer(threading.Thread):
     def __init__(self, to=0, speed=0, controller=None):
         threading.Thread.__init__(self)

@@ -21,6 +21,7 @@ import style
 
 from grandpa import locking
 
+
 class StatusLine(object):
     def __init__(self, root, win):
         self.root = root
@@ -48,9 +49,9 @@ class StatusLine(object):
 
         for s in xrange(4):
             if s == self.stack:
-                line += " <%d>" % (s+1)
+                line += " <%d>" % (s + 1)
             else:
-                line += "  %d " % (s+1)
+                line += "  %d " % (s + 1)
 
         if self.error is not None:
             err = ' Error: %s' % self.error

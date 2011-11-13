@@ -17,6 +17,7 @@
 
 import math
 
+
 class Stage(object):
     def num2fixture(self, number):
         """
@@ -62,8 +63,10 @@ class Rockfabrik(Stage):
         for degree in all_angles:
             angle = degree * math.pi / 180.0
 
-            r = 0.5 / math.sqrt((math.cos(angle) / float(radius_horizontal * 2)) ** 2 +
-                                (math.sin(angle) / float(radius_vertical * 2)) ** 2)
+            r = 0.5 / math.sqrt(
+                (math.cos(angle) / float(radius_horizontal * 2)) ** 2 +
+                (math.sin(angle) / float(radius_vertical * 2)) ** 2
+            )
 
             cx = midx + r * math.cos(angle)
             cy = midy + r * math.sin(angle)

@@ -76,6 +76,7 @@ KEYMAP = {
     'redraw':        0x19, # l
 }
 
+
 class Keys(threading.Thread):
     def __init__(self, root):
         threading.Thread.__init__(self)
@@ -301,9 +302,11 @@ class Keys(threading.Thread):
 
         dd = None
         if self.root.ftfader.faderval > 0:
-            dd = self.root.tavern.spawn_dyndim(to=value,
-                                               speed=self.root.ftfader.faderval,
-                                               controller=self.root.controller)
+            dd = self.root.tavern.spawn_dyndim(
+                to=value,
+                speed=self.root.ftfader.faderval,
+                controller=self.root.controller
+            )
             f = lambda x: dd.add_sect(x)
         else:
             f = lambda x: setattr(x, 'dimmer', value)
@@ -316,11 +319,11 @@ class Keys(threading.Thread):
         else:
             self.root.controller.dim_update()
 
-    def saveflash(self, dimmer):
+    def saveflash(self, dim):
         """
         Store the current selections in a local dimmer setting.
         """
-        self.selects[self.cur][dimmer] = self.root.tavern.get_selection_struct()
+        self.selects[self.cur][dim] = self.root.tavern.get_selection_struct()
         self.root.config['selections'] = self.selects
 
     def flasher(self, flashkey):
@@ -351,7 +354,8 @@ class Keys(threading.Thread):
                 if self.mod_shift:
                     self.keep_dimmer[dimmer] = True
         elif self.released(flashkey) and not self.keep_dimmer[dimmer]:
-            # key release, but we want the dimmer to go on in case shift is hold
+            # key release, but we want the dimmer to
+            # stay on in case shift is hold
             if self.mod_shift:
                 self.keep_dimmer[dimmer] = True
                 self.setflash(dimmer, True)

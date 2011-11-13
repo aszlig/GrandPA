@@ -25,12 +25,14 @@ from grandpa.color import Color
 
 from grandpa import locking
 
+
 class Section(object):
     """
     Represents a visual section where the dimmer gets delegated to DMXout.
     """
     DIMCHARS = [
-        ' ', '+', '*', 'ACS_DIAMOND', 'ACS_BULLET', 'ACS_BOARD', 'ACS_PLUS', 'ACS_CKBOARD', 'ACS_LANTERN', 'ACS_BLOCK'
+        ' ', '+', '*', 'ACS_DIAMOND', 'ACS_BULLET', 'ACS_BOARD',
+        'ACS_PLUS', 'ACS_CKBOARD', 'ACS_LANTERN', 'ACS_BLOCK',
     ]
 
     def __init__(self, length, sect=None, rect=None, bar=None):
@@ -64,22 +66,26 @@ class Section(object):
         self.dimmer_lock.acquire()
         self._dimmer = val
         self.dimmer_lock.release()
+
     def _get_dimmer(self):
         self.dimmer_lock.acquire()
         ret = self._dimmer
         self.dimmer_lock.release()
         return ret
+
     dimmer = property(_get_dimmer, _set_dimmer)
 
     def _set_color(self, val):
         self.color_lock.acquire()
         self._color.set_color(val)
         self.color_lock.release()
+
     def _get_color(self):
         self.color_lock.acquire()
         ret = self._color
         self.color_lock.release()
         return ret
+
     color = property(_get_color, _set_color)
 
     def update(self):
@@ -125,6 +131,7 @@ class Section(object):
                 self.sect.refresh()
         locking.refresh_lock.release()
 
+
 class Bar(object):
     def __init__(self, root, number, x, y, inverted=False, fbdev=None):
         self.root = root
@@ -143,13 +150,13 @@ class Bar(object):
         for s in xrange(3):
             if fbdev is None:
                 sect = self.win.derwin(1, sectsize + 1, 1, 1 + sectsize * s)
-                setattr(self, 'section%d' % (s + 1), Section(sectsize, bar=self,
-                                                             sect=sect))
+                setattr(self, 'section%d' % (s + 1),
+                        Section(sectsize, bar=self, sect=sect))
             else:
                 rect = fbdev.newrect(bar_x + 1 + sectsize * s, bar_y + 1,
                                      sectsize, 1)
-                setattr(self, 'section%d' % (s + 1), Section(sectsize, bar=self,
-                                                             rect=rect))
+                setattr(self, 'section%d' % (s + 1),
+                        Section(sectsize, bar=self, rect=rect))
 
         if self.inverted:
             self.sections = (self.section3, self.section2, self.section1)

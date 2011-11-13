@@ -17,6 +17,7 @@
 
 import curses
 
+
 class Attr(object):
     def __init__(self, fg=0, bg=0, attr=0):
         self.fg = fg
@@ -26,6 +27,7 @@ class Attr(object):
 
     def cursesattr(self):
         return curses.color_pair(self.pairnum) | self.attr
+
 
 class Style(object):
     def __init__(self):
@@ -46,6 +48,7 @@ class Style(object):
 
         attr = self._attrs.get(name)
         return attr.cursesattr()
+
 
 class Default(Style):
     # colors

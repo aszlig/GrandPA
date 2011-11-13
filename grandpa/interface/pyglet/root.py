@@ -24,6 +24,7 @@ import keys
 
 import bar
 
+
 class Root(pyglet.window.Window):
     def __init__(self, *args, **kwargs):
         super(Root, self).__init__(*args, **kwargs)
@@ -71,8 +72,10 @@ class Root(pyglet.window.Window):
         for degree in all_angles:
             angle = degree * math.pi / 180.0
 
-            r = 0.5 / math.sqrt((math.cos(angle) / float(radius_horizontal * 2)) ** 2 +
-                                (math.sin(angle) / float(radius_vertical * 2)) ** 2)
+            r = 0.5 / math.sqrt(
+                (math.cos(angle) / float(radius_horizontal * 2)) ** 2 +
+                (math.sin(angle) / float(radius_vertical * 2)) ** 2
+            )
 
             x = r * math.cos(angle)
             y = r * math.sin(angle)
@@ -118,9 +121,9 @@ class Root(pyglet.window.Window):
         pos2 = getattr(self, 'pos2', 0)
         for i, bar in enumerate(self.bars):
             for j, color in enumerate(bar.colors):
-                if ((i+1) * 3 + (j+1)) % 6 == int(pos1):
+                if ((i + 1) * 3 + (j + 1)) % 6 == int(pos1):
                     bar.colors[j] = [0.0, 1.0, 1.0]
-                elif ((i+1) * 3 + (j+1)) % 9 == int(pos2):
+                elif ((i + 1) * 3 + (j + 1)) % 9 == int(pos2):
                     bar.colors[j] = [1.0, 0.0, 0.0]
                 else:
                     bar.colors[j] = [0.0, 0.0, 1.0]

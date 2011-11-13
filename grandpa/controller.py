@@ -28,6 +28,7 @@ import array
 from grandpa import dmx
 from grandpa import fixture
 
+
 class Controller(threading.Thread):
     def __init__(self, root):
         """
@@ -127,8 +128,8 @@ class Controller(threading.Thread):
         self.root.status.reset_error()
 
     def dmxout_single(self, addr, values):
-        start = addr-1
-        end = start+len(values)
+        start = addr - 1
+        end = start + len(values)
         self.packet[start:end] = values
 
     def dmxflush(self):

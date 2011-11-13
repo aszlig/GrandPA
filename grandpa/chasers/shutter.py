@@ -20,6 +20,7 @@ import logging
 
 from grandpa.chaser import Chaser
 
+
 class SimpleShutter(Chaser):
     label = 'Simple shutter'
 
@@ -41,6 +42,7 @@ class SimpleShutter(Chaser):
         if self.i >= 10:
             self.i = 0
 
+
 class DistortedShutter(Chaser):
     label = 'Distorted shutter'
 
@@ -52,7 +54,8 @@ class DistortedShutter(Chaser):
 
     def next(self):
         if self.i == 0:
-            sects = random.sample(xrange(self.sectlen), int(self.sectlen * 0.25))
+            sects = random.sample(xrange(self.sectlen),
+                                  int(self.sectlen * 0.25))
             for n, s in enumerate(self.sections):
                 if n in sects:
                     s.color.alpha = 255
@@ -66,6 +69,7 @@ class DistortedShutter(Chaser):
         self.i += 1
         if self.i >= 10:
             self.i = 0
+
 
 class ChainShutter(Chaser):
     label = 'Chain shutter'
@@ -82,7 +86,7 @@ class ChainShutter(Chaser):
         while True:
             for i in xrange(int(self.sectlen / 3)):
                 cur = i * 3
-                yield self.sections[cur:cur+3]
+                yield self.sections[cur:cur + 3]
 
     def next(self):
         if self.i < self.chains:
@@ -96,6 +100,7 @@ class ChainShutter(Chaser):
         self.i += 1
         if self.i >= 10:
             self.i = 0
+
 
 class Jump(Chaser):
     label = 'Jump'
