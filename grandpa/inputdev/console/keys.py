@@ -23,57 +23,59 @@ import Queue
 import rawkbd
 
 KEYMAP = {
-    'quit':          0x2d, # q
+    'quit': 0x2d,  # q
 
-    'select_all':    0x1e, # a
-    'select_odd':    0x1f, # o
-    'select_even':   0x20, # e
-    'select_none':   0x26, # n
-    'select_invert': 0x22, # i
+    'select_all': 0x1e,  # a
+    'select_odd': 0x1f,  # o
+    'select_even': 0x20,  # e
+    'select_none': 0x26,  # n
+    'select_invert': 0x22,  # i
 
-    'select_direct': [ # f1-f12
+    'select_direct': [
+        # f1-f12
         0x3b, 0x3c, 0x3d, 0x3e, 0x3f, 0x40,
         0x41, 0x42, 0x43, 0x44, 0x57, 0x58,
     ],
 
-    'stack_1':   0x2d, # q
-    'stack_2':   0x2e, # j
-    'stack_3':   0x2f, # k
-    'stack_4':   0x30, # x
+    'stack_1': 0x2d,  # q
+    'stack_2': 0x2e,  # j
+    'stack_3': 0x2f,  # k
+    'stack_4': 0x30,  # x
 
-    'flash_0':   0x39, # space
-    'flash_1':   0x31, # b
-    'flash_2':   0x32, # m
-    'flash_3':   0x33, # w
-    'flash_4':   0x34, # v
+    'flash_0': 0x39,  # space
+    'flash_1': 0x31,  # b
+    'flash_2': 0x32,  # m
+    'flash_3': 0x33,  # w
+    'flash_4': 0x34,  # v
 
-    'numbers': [ # 0-9
+    'numbers': [
+        # 0-9
         0x0b, 0x02, 0x03, 0x04, 0x05,
         0x06, 0x07, 0x08, 0x09, 0x0a,
     ],
 
-    'reset_chasers': 0x6f, # delete
+    'reset_chasers': 0x6f,  # delete
 
-    'list_activate': 0x1c, # enter
-    'list_up':       0x67, # up
-    'list_down':     0x6c, # down
-    'list_left':     0x69, # left
-    'list_right':    0x6a, # right
-    'list_pageup':   0x68, # page up
-    'list_pagedown': 0x6d, # page down
-    'list_direct':   0x12, # .
+    'list_activate': 0x1c,  # enter
+    'list_up': 0x67,  # up
+    'list_down': 0x6c,  # down
+    'list_left': 0x69,  # left
+    'list_right': 0x6a,  # right
+    'list_pageup': 0x68,  # page up
+    'list_pagedown': 0x6d,  # page down
+    'list_direct': 0x12,  # .
 
-    'learn_speed':   0x0f, # tab
-    'switch_fader':  0x15, # f
+    'learn_speed': 0x0f,  # tab
+    'switch_fader': 0x15,  # f
 
-    'superstrobe':   0x0e, # backspace
-    'record_chaser': 0x18, # r
+    'superstrobe': 0x0e,  # backspace
+    'record_chaser': 0x18,  # r
 
-    'toggle_clock':  0x17, # c
+    'toggle_clock': 0x17,  # c
 
-    'cancel_cmd':    0x01, # esc
+    'cancel_cmd': 0x01,  # esc
 
-    'redraw':        0x19, # l
+    'redraw': 0x19,  # l
 }
 
 
