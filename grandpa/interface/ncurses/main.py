@@ -23,6 +23,7 @@ from grandpa.inputdev.console import rawkbd
 from grandpa.inputdev.console import keys
 from grandpa.inputdev.console import mouse
 
+
 def curses_wrapper(scr, config, options):
     curses.raw()
 
@@ -59,6 +60,7 @@ def curses_wrapper(scr, config, options):
         mousehandler.stop()
 
     root.stop()
+
 
 def startup(config, options):
     rawkbd.set_raw_kbd()

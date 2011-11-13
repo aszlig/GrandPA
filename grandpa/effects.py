@@ -1,6 +1,7 @@
 import threading
 import Queue
 
+
 class Recorder(threading.Thread):
     def __init__(self, fixtures):
         threading.Thread.__init__(self)

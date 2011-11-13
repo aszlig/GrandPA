@@ -28,6 +28,7 @@ except:
 else:
     from interface.pyglet import main as interface
 
+
 class Grandpa(object):
     DEFAULT_CONFIG = {
         'stage': 'Rockfabrik'

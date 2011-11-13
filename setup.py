@@ -21,20 +21,20 @@ from distutils.core import setup, Extension
 from Cython.Distutils import build_ext
 
 mouse = Extension('grandpa.inputdev.console.mouse',
-                  libraries = ['gpm'],
-                  sources = ['grandpa/inputdev/console/mouse.pyx'])
+                  libraries=['gpm'],
+                  sources=['grandpa/inputdev/console/mouse.pyx'])
 
 fb = Extension('grandpa.interface.ncurses.fb',
-               sources = ['grandpa/interface/ncurses/fb.pyx'])
+               sources=['grandpa/interface/ncurses/fb.pyx'])
 
-setup(name = 'GrandPA',
-      version = '0.5',
-      description = 'The GrandPA LedBar lighting controller',
-      author = 'aszlig',
-      author_email = 'aszlig@redmoonstudios.org',
-      cmdclass = {'build_ext': build_ext},
-      ext_modules = [mouse, fb],
-      scripts = ['bin/grandpa'],
-      packages = ['grandpa', 'grandpa.interface', 'grandpa.interface.ncurses',
-                  'grandpa.interface.pyglet', 'grandpa.inputdev',
-                  'grandpa.inputdev.console', 'grandpa.chasers'])
+setup(name='GrandPA',
+      version='0.5',
+      description='The GrandPA LedBar lighting controller',
+      author='aszlig',
+      author_email='aszlig@redmoonstudios.org',
+      cmdclass={'build_ext': build_ext},
+      ext_modules=[mouse, fb],
+      scripts=['bin/grandpa'],
+      packages=['grandpa', 'grandpa.interface', 'grandpa.interface.ncurses',
+                'grandpa.interface.pyglet', 'grandpa.inputdev',
+                'grandpa.inputdev.console', 'grandpa.chasers'])

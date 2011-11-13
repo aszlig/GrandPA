@@ -24,8 +24,10 @@ import fixture
 
 from grandpa.color import Color
 
+
 class ChaserError(RuntimeError):
     pass
+
 
 class Chaser(threading.Thread):
     label = None

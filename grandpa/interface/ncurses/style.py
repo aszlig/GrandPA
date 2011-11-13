@@ -17,6 +17,7 @@
 
 import curses
 
+
 class Attr(object):
     def __init__(self, fg=0, bg=0, attr=0):
         self.fg = fg
@@ -26,6 +27,7 @@ class Attr(object):
 
     def cursesattr(self):
         return curses.color_pair(self.pairnum) | self.attr
+
 
 class Style(object):
     def __init__(self):
@@ -47,55 +49,84 @@ class Style(object):
         attr = self._attrs.get(name)
         return attr.cursesattr()
 
+
 class Default(Style):
     # colors
-    color_bright_red        = Attr(curses.COLOR_RED)
-    color_japanese_laurel   = Attr(curses.COLOR_GREEN)
-    color_dark_blue         = Attr(curses.COLOR_BLUE)
-    color_persian_green     = Attr(curses.COLOR_CYAN)
-    color_flirt             = Attr(curses.COLOR_MAGENTA)
-    color_chelsea_gem       = Attr(curses.COLOR_YELLOW)
-    color_silver_chalice    = Attr(curses.COLOR_WHITE)
+    color_bright_red = Attr(curses.COLOR_RED)
+    color_japanese_laurel = Attr(curses.COLOR_GREEN)
+    color_dark_blue = Attr(curses.COLOR_BLUE)
+    color_persian_green = Attr(curses.COLOR_CYAN)
+    color_flirt = Attr(curses.COLOR_MAGENTA)
+    color_chelsea_gem = Attr(curses.COLOR_YELLOW)
+    color_silver_chalice = Attr(curses.COLOR_WHITE)
 
-    color_persimmon         = Attr(curses.COLOR_RED,     attr=curses.A_BOLD)
-    color_screaming_green   = Attr(curses.COLOR_GREEN,   attr=curses.A_BOLD)
-    color_dodger_blue       = Attr(curses.COLOR_BLUE,    attr=curses.A_BOLD)
-    color_aquamarine        = Attr(curses.COLOR_CYAN,    attr=curses.A_BOLD)
-    color_pink_flamingo     = Attr(curses.COLOR_MAGENTA, attr=curses.A_BOLD)
-    color_gorse             = Attr(curses.COLOR_YELLOW,  attr=curses.A_BOLD)
-    color_white             = Attr(curses.COLOR_WHITE,   attr=curses.A_BOLD)
+    color_persimmon = Attr(curses.COLOR_RED,
+                           attr=curses.A_BOLD)
+    color_screaming_green = Attr(curses.COLOR_GREEN,
+                                 attr=curses.A_BOLD)
+    color_dodger_blue = Attr(curses.COLOR_BLUE,
+                             attr=curses.A_BOLD)
+    color_aquamarine = Attr(curses.COLOR_CYAN,
+                            attr=curses.A_BOLD)
+    color_pink_flamingo = Attr(curses.COLOR_MAGENTA,
+                               attr=curses.A_BOLD)
+    color_gorse = Attr(curses.COLOR_YELLOW,
+                       attr=curses.A_BOLD)
+    color_white = Attr(curses.COLOR_WHITE,
+                       attr=curses.A_BOLD)
 
-    color_emperor           = Attr(curses.COLOR_BLACK,   attr=curses.A_BOLD)
+    color_emperor = Attr(curses.COLOR_BLACK,
+                         attr=curses.A_BOLD)
 
     # bar boxes
-    bar_selected          = Attr(curses.COLOR_CYAN)
-    bar_deselected        = Attr(curses.COLOR_BLACK, attr=curses.A_BOLD)
-    bar_activated         = Attr(curses.COLOR_WHITE, attr=curses.A_BOLD)
+    bar_selected = Attr(curses.COLOR_CYAN)
+    bar_deselected = Attr(curses.COLOR_BLACK,
+                          attr=curses.A_BOLD)
+    bar_activated = Attr(curses.COLOR_WHITE,
+                         attr=curses.A_BOLD)
 
     # section numbers
-    section_selected      = Attr(curses.COLOR_CYAN,  attr=curses.A_BOLD)
-    section_deselected    = Attr(curses.COLOR_BLACK, attr=curses.A_BOLD)
-    section_activated     = Attr(curses.COLOR_WHITE, attr=curses.A_BOLD)
+    section_selected = Attr(curses.COLOR_CYAN,
+                            attr=curses.A_BOLD)
+    section_deselected = Attr(curses.COLOR_BLACK,
+                              attr=curses.A_BOLD)
+    section_activated = Attr(curses.COLOR_WHITE,
+                             attr=curses.A_BOLD)
 
     # status bar
-    statusbar             = Attr(curses.COLOR_WHITE, curses.COLOR_BLUE,    curses.A_BOLD)
-    statusbar_error       = Attr(curses.COLOR_WHITE, curses.COLOR_RED,     curses.A_BOLD)
+    statusbar = Attr(curses.COLOR_WHITE,
+                     curses.COLOR_BLUE,
+                     curses.A_BOLD)
+    statusbar_error = Attr(curses.COLOR_WHITE,
+                           curses.COLOR_RED,
+                           curses.A_BOLD)
 
     # cue/chaser menu
-    list_cue              = Attr(curses.COLOR_GREEN,  attr=curses.A_BOLD)
-    list_normal           = Attr(curses.COLOR_RED,    attr=curses.A_BOLD)
-    list_cue_highlight    = Attr(curses.COLOR_GREEN,  curses.COLOR_YELLOW, curses.A_BOLD)
-    list_highlight        = Attr(curses.COLOR_RED,    curses.COLOR_GREEN,  curses.A_BOLD)
-    list_active_normal    = Attr(curses.COLOR_YELLOW, attr=curses.A_BOLD)
-    list_active_highlight = Attr(curses.COLOR_YELLOW, curses.COLOR_GREEN,  curses.A_BOLD)
+    list_cue = Attr(curses.COLOR_GREEN,
+                    attr=curses.A_BOLD)
+    list_normal = Attr(curses.COLOR_RED,
+                       attr=curses.A_BOLD)
+    list_cue_highlight = Attr(curses.COLOR_GREEN,
+                              curses.COLOR_YELLOW,
+                              curses.A_BOLD)
+    list_highlight = Attr(curses.COLOR_RED,
+                          curses.COLOR_GREEN,
+                          curses.A_BOLD)
+    list_active_normal = Attr(curses.COLOR_YELLOW,
+                              attr=curses.A_BOLD)
+    list_active_highlight = Attr(curses.COLOR_YELLOW,
+                                 curses.COLOR_GREEN,
+                                 curses.A_BOLD)
 
     # fader box
-    fader_active          = Attr(curses.COLOR_RED,    attr=curses.A_BOLD)
-    fader_inactive        = Attr(curses.COLOR_RED)
+    fader_active = Attr(curses.COLOR_RED,
+                        attr=curses.A_BOLD)
+    fader_inactive = Attr(curses.COLOR_RED)
 
     # obvious ;-)
-    clock_number          = Attr(curses.COLOR_CYAN,   attr=curses.A_BOLD)
-    clock_dots            = Attr(curses.COLOR_CYAN)
+    clock_number = Attr(curses.COLOR_CYAN,
+                        attr=curses.A_BOLD)
+    clock_dots = Attr(curses.COLOR_CYAN)
 
 theme = Default()
 attr = theme.attr

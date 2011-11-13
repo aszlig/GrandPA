@@ -28,6 +28,7 @@ import fb
 
 from grandpa import locking
 
+
 class Root(object):
     # must be divisible by 3
     BAR_LENGTH = 39

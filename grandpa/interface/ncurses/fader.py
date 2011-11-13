@@ -22,6 +22,7 @@ import style
 
 from grandpa import locking
 
+
 class FadeControl(object):
     def __init__(self):
         self.faders = []
@@ -41,7 +42,7 @@ class FadeControl(object):
 
         try:
             i = self.faders.index(self.active_fader)
-            self.active_fader = self.faders[i+1]
+            self.active_fader = self.faders[i + 1]
         except (ValueError, IndexError):
             self.active_fader = self.faders[0]
 
@@ -56,6 +57,7 @@ class FadeControl(object):
         if self.active_fader is None:
             return
         self.active_fader.adjust(value)
+
 
 class Fader(object):
     def __init__(self, root, window):
@@ -148,12 +150,14 @@ class Fader(object):
             self.fader.refresh()
         locking.refresh_lock.release()
 
+
 class DimmerFader(Fader):
     startval = 255
 
     def set_faderval(self, value):
         self.root.tavern.update_dyndimmer(self.faderval)
         self.root.controller.dim_update()
+
 
 class FadetimeFader(Fader):
     startval = 0

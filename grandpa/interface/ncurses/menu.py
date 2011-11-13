@@ -23,6 +23,7 @@ import grandpa.chasers
 
 from grandpa import locking
 
+
 class Menu(object):
     COLUMNS = 6
 
@@ -161,7 +162,8 @@ class Menu(object):
         self.update()
 
     def pagedown(self):
-        newval = self.pointer + (self.listlen - self.pointer % self.listlen) - 1
+        colpos = self.listlen - self.pointer % self.listlen
+        newval = self.pointer + colpos - 1
         if newval >= self.listlen * self.COLUMNS:
             return
         self.pointer = newval

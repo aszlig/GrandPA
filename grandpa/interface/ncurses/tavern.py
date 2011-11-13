@@ -27,6 +27,7 @@ from grandpa import locking
 
 import fixture
 
+
 class Tavern(object):
     def __init__(self, root, fbdev=None):
         self.root = root

@@ -19,6 +19,7 @@ import random
 
 from grandpa.chaser import Chaser
 
+
 class SimpleFade(Chaser):
     label = 'Simple section fade'
     frames = 30
@@ -44,12 +45,13 @@ class SimpleFade(Chaser):
                     section.color.alpha -= int(mod / (n + 1))
                 yield
 
-            x = [n + 1 if n + 1 <self.sectlen else 0
+            x = [n + 1 if n + 1 < self.sectlen else 0
                  for n in x]
 
     def next(self):
         self.jumper.next()
         self.wait(0.3, frames=self.frames)
+
 
 class DistortedFade(Chaser):
     label = 'Distorted section fade'
@@ -62,7 +64,8 @@ class DistortedFade(Chaser):
     def sectionjump(self):
         while True:
             decisions = []
-            sects = random.sample(xrange(self.sectlen), int(self.sectlen * 0.5))
+            sects = random.sample(xrange(self.sectlen),
+                                  int(self.sectlen * 0.5))
 
             for n, s in enumerate(self.sections):
                 if n in sects:
@@ -80,7 +83,7 @@ class DistortedFade(Chaser):
         self.wait(0.3, frames=self.frames)
 
 if __name__ == '__main__':
-    s = SectionFade(None, [1,2,3,4,5,6,7,8,9])
+    s = SectionFade(None, range(1, 10))
     i = iter(s.sectionjump())
     for n in xrange(60):
         print i.next()

@@ -22,12 +22,13 @@ import termios
 import fcntl
 
 # from linux/kd.h:
-KDGKBMODE = 0x4B44 # get current keyboard mode
-KDSKBMODE = 0x4B45 # set current keyboard mode
+KDGKBMODE = 0x4B44  # get current keyboard mode
+KDSKBMODE = 0x4B45  # set current keyboard mode
 
 K_MEDIUMRAW = 0x02
 
 termstate = {}
+
 
 def set_raw_kbd():
     fd = os.open('/dev/tty', os.O_RDONLY)
@@ -59,6 +60,7 @@ def set_raw_kbd():
     termstate['kbdmode'] = kbdmode
     termstate['term'] = term
 
+
 def unraw():
     """
     Temporarily unraw the keyboard.
@@ -67,6 +69,7 @@ def unraw():
     fd = sys.stdin.fileno()
     os.read(fd, 1)
     fcntl.ioctl(termstate['fd'], KDSKBMODE, K_MEDIUMRAW)
+
 
 def restore_kbd():
     termios.tcsetattr(sys.stdin.fileno(), termios.TCSANOW, termstate['term'])

@@ -18,24 +18,25 @@
 from functools import partial
 
 COLORMAP = {
-    (0xaa, 0x00, 0x00): 'bright_red',      # dark red
-    (0x00, 0xaa, 0x00): 'japanese_laurel', # dark green
-    (0x00, 0x00, 0xaa): 'dark_blue',       # dark blue
-    (0x00, 0xaa, 0xaa): 'persian_green',   # dark cyan
-    (0xaa, 0x00, 0xaa): 'flirt',           # dark magenta
-    (0xaa, 0x55, 0x00): 'chelsea_gem',     # dark yellow
-    (0xaa, 0xaa, 0xaa): 'silver_chalice',  # dark white
+    (0xaa, 0x00, 0x00): 'bright_red',       # dark red
+    (0x00, 0xaa, 0x00): 'japanese_laurel',  # dark green
+    (0x00, 0x00, 0xaa): 'dark_blue',        # dark blue
+    (0x00, 0xaa, 0xaa): 'persian_green',    # dark cyan
+    (0xaa, 0x00, 0xaa): 'flirt',            # dark magenta
+    (0xaa, 0x55, 0x00): 'chelsea_gem',      # dark yellow
+    (0xaa, 0xaa, 0xaa): 'silver_chalice',   # dark white
 
-    (0xff, 0x55, 0x55): 'persimmon',       # light red
-    (0x55, 0xff, 0x55): 'screaming_green', # light green
-    (0x55, 0x55, 0xff): 'dodger_blue',     # light blue
-    (0x55, 0xff, 0xff): 'aquamarine',      # light cyan
-    (0xff, 0x55, 0xff): 'pink_flamingo',   # light magenta
-    (0xff, 0xff, 0x55): 'gorse',           # light yellow
-    (0xff, 0xff, 0xff): 'white',           # light white
+    (0xff, 0x55, 0x55): 'persimmon',        # light red
+    (0x55, 0xff, 0x55): 'screaming_green',  # light green
+    (0x55, 0x55, 0xff): 'dodger_blue',      # light blue
+    (0x55, 0xff, 0xff): 'aquamarine',       # light cyan
+    (0xff, 0x55, 0xff): 'pink_flamingo',    # light magenta
+    (0xff, 0xff, 0x55): 'gorse',            # light yellow
+    (0xff, 0xff, 0xff): 'white',            # light white
 
-    (0x55, 0x55, 0x55): 'emperor',         # light black
+    (0x55, 0x55, 0x55): 'emperor',          # light black
 }
+
 
 class Color(object):
     def __init__(self, red=0, green=0, blue=0, alpha=255):
@@ -148,9 +149,9 @@ class Color(object):
 
     def set_color(self, color):
         if isinstance(color, Color):
-            self.red   = color.red
+            self.red = color.red
             self.green = color.green
-            self.blue  = color.blue
+            self.blue = color.blue
             self.alpha = color.alpha
         else:
             self.set_channels(*color)
@@ -174,9 +175,9 @@ class Color(object):
         red, green, blue = [c * mod for c in cur_color]
 
         def _keyfunc(color):
-            r = red   - color[0]
+            r = red - color[0]
             g = green - color[1]
-            b = blue  - color[2]
+            b = blue - color[2]
 
             # calculate the euclidean distance
             return r * r + g * g + b * b
