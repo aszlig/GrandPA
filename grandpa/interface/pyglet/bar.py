@@ -27,14 +27,14 @@ class Bar(object):
         height = .2 / ratio
 
         vertices = [
-            -width+x, -height+y, -height+z, # 0
-            -width+x, -height+y,  height+z, # 1 FP
-            -width+x,  height+y, -height+z, # 2
-            -width+x,  height+y,  height+z, # 3 FP
-             width+x, -height+y, -height+z, # 4
-             width+x, -height+y,  height+z, # 5 FP
-             width+x,  height+y, -height+z, # 6
-             width+x,  height+y,  height+z, # 7 FP
+            -width + x, -height + y, -height + z,  # 0
+            -width + x, -height + y, height + z,   # 1 FP
+            -width + x, height + y, -height + z,   # 2
+            -width + x, height + y, height + z,    # 3 FP
+            width + x, -height + y, -height + z,   # 4
+            width + x, -height + y, height + z,    # 5 FP
+            width + x, height + y, -height + z,    # 6
+            width + x, height + y, height + z,     # 7 FP
         ]
 
         indices = [
@@ -95,10 +95,10 @@ class Bar(object):
             sect_x_pos = -width + barlen / self.SECTIONS * (i + 1)
 
             vertices = [
-                sect_x_neg+x, -height+y,  height+z,
-                sect_x_neg+x,  height+y,  height+z,
-                sect_x_pos+x, -height+y,  height+z,
-                sect_x_pos+x,  height+y,  height+z,
+                sect_x_neg + x, -height + y, height + z,
+                sect_x_neg + x, height + y, height + z,
+                sect_x_pos + x, -height + y, height + z,
+                sect_x_pos + x, height + y, height + z,
             ]
 
             sect_vertices.append(vertices)
