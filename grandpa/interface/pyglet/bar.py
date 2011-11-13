@@ -27,14 +27,14 @@ class Bar(object):
         height = .2 / ratio
 
         vertices = [
-            -width + x, -height + y, -height + z,  # 0
-            -width + x, -height + y, height + z,   # 1 FP
-            -width + x, height + y, -height + z,   # 2
-            -width + x, height + y, height + z,    # 3 FP
-            width + x, -height + y, -height + z,   # 4
-            width + x, -height + y, height + z,    # 5 FP
-            width + x, height + y, -height + z,    # 6
-            width + x, height + y, height + z,     # 7 FP
+            x - width, y - height, z - height,  # 0
+            x - width, y - height, height + z,  # 1 FP
+            x - width, height + y, z - height,  # 2
+            x - width, height + y, height + z,  # 3 FP
+            width + x, y - height, z - height,  # 4
+            width + x, y - height, height + z,  # 5 FP
+            width + x, height + y, z - height,  # 6
+            width + x, height + y, height + z,  # 7 FP
         ]
 
         indices = [
@@ -91,13 +91,13 @@ class Bar(object):
         barlen = width * 2.0
         for i in xrange(self.SECTIONS):
 
-            sect_x_neg = -width + barlen / self.SECTIONS * i
-            sect_x_pos = -width + barlen / self.SECTIONS * (i + 1)
+            sect_x_neg = (barlen - width) / self.SECTIONS * i
+            sect_x_pos = (barlen - width) / self.SECTIONS * (i + 1)
 
             vertices = [
-                sect_x_neg + x, -height + y, height + z,
+                sect_x_neg + x, y - height, height + z,
                 sect_x_neg + x, height + y, height + z,
-                sect_x_pos + x, -height + y, height + z,
+                sect_x_pos + x, y - height, height + z,
                 sect_x_pos + x, height + y, height + z,
             ]
 
