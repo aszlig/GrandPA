@@ -210,7 +210,7 @@ class Menu(object):
             self.menu.attron(attr)
             self.menu.addstr(n % self.listlen,
                              self.listwidth * (n // self.listlen),
-                             label)
+                             label[:self.listwidth-1])
             self.menu.attroff(attr)
 
         return
