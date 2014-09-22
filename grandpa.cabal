@@ -1,0 +1,25 @@
+name:                grandpa
+version:             0.1.0
+synopsis:            The GrandPA LedBar lighting controller
+homepage:            https://github.com/rockfabrik/grandpa
+license:             GPL-3
+license-file:        LICENSE
+author:              aszlig
+maintainer:          aszlig@redmoonstudios.org
+category:            Lighting
+build-type:          Simple
+cabal-version:       >=1.10
+
+executable grandpa
+  main-is:             Main.hs
+  other-modules:       GrandPA.Enttec
+  build-depends:       base >=4.7 && < 4.8,
+                       bytestring,
+                       cereal,
+                       netwire == 5.*,
+                       sdl2 == 1.*,
+                       stm
+  pkgconfig-depends:   libftdi1
+  build-tools:         c2hs
+  ghc-options:         -Wall
+  default-language:    Haskell2010
