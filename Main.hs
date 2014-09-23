@@ -1,11 +1,15 @@
 module Main where
 
-import Data.Word (Word8)
-
+import Control.Monad (void)
 import Control.Wire
+import Data.Word (Word8)
+import Foreign.C.String (withCAString)
 import Prelude hiding ((.), id, until)
 
+import qualified Graphics.UI.SDL as SDL
+
 import GrandPA.Enttec (Widget, withWidget, sendDMX)
+import GrandPA.Font (withFont, blitString)
 
 bleepWire :: SimpleWire () (Event [Word8])
 bleepWire = periodic 3  . pure (take 256 $ cycle [0xff, 0x00, 0x00, 0x00])
@@ -30,4 +34,16 @@ mainLoop wire session widget = do
              mainLoop newWire newSession widget
 
 main :: IO ()
-main = withWidget $ mainLoop mainWire clockSession_
+main = do
+    window <- withCAString "GrandPA" $ \title ->
+        SDL.createWindow title posX posY 1280 1024 flags
+    renderer <- SDL.createRenderer window (-1) SDL.rendererFlagSoftware
+    withFont renderer $ \tex -> do
+        void $ SDL.renderClear renderer
+        void $ blitString renderer tex (30, 10) "Hello World!"
+        void $ SDL.renderPresent renderer
+        withWidget $ mainLoop mainWire clockSession_
+  where
+    posX = SDL.windowPosCentered
+    posY = SDL.windowPosCentered
+    flags = SDL.windowFlagResizable
