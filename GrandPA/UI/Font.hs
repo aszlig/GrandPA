@@ -1,5 +1,5 @@
 {-# LANGUAGE QuasiQuotes #-}
-module GrandPA.Font (withFont, blitChar, blitString) where
+module GrandPA.UI.Font (withFont, blitChar, blitString) where
 
 import Control.Applicative ((<$>))
 import Control.Exception (bracket)

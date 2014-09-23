@@ -8,8 +8,8 @@ import Prelude hiding ((.), id, until)
 import qualified Graphics.UI.SDL as SDL
 
 import GrandPA.Enttec (Widget, withWidget, sendDMX)
-import GrandPA.Font (withFont, blitString)
 import GrandPA.UI (GrandUI(..), withUI)
+import GrandPA.UI.Font (withFont, blitString)
 
 bleepWire :: SimpleWire () (Event [Word8])
 bleepWire = periodic 3  . pure (take 256 $ cycle [0xff, 0x00, 0x00, 0x00])

@@ -12,9 +12,10 @@ cabal-version:       >=1.10
 
 executable grandpa
   main-is:             Main.hs
-  other-modules:       GrandPA.Enttec,
-                       GrandPA.AsciiQuote
-                       GrandPA.UI
+  other-modules:       GrandPA.AsciiQuote,
+                       GrandPA.Enttec,
+                       GrandPA.UI,
+                       GrandPA.UI.Font
   build-depends:       base >=4.7 && < 4.8,
                        bytestring,
                        cereal,
