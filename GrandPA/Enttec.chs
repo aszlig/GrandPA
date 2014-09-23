@@ -2,17 +2,20 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 module GrandPA.Enttec (Widget, withWidget, sendDMX) where
 
-import Foreign hiding (void)
-import Foreign.C
-
-import Data.Maybe (listToMaybe)
-
-import Control.Monad (filterM, void)
 import Control.Exception (bracket)
-
+import Control.Monad (filterM, void)
+import Data.Maybe (listToMaybe)
 import Data.Serialize (Serialize(..), encode)
 import Data.Serialize.Get (getWord8, getWord16le, getByteString)
 import Data.Serialize.Put (putWord8, putWord16le, putByteString)
+import Data.Word (Word8)
+import Foreign.C.String (castCUCharToChar)
+import Foreign.C.Types (CInt(..), CUInt, CUChar)
+import Foreign.Marshal.Alloc (alloca)
+import Foreign.Marshal.Array (allocaArray0, peekArray0)
+import Foreign.Ptr (Ptr, nullPtr, castPtr)
+import Foreign.Storable (Storable(..))
+
 import qualified Data.ByteString as BS
 
 #include <ftdi.h>
