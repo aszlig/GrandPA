@@ -12,13 +12,14 @@ cabal-version:       >=1.10
 
 executable grandpa
   main-is:             Main.hs
-  other-modules:       GrandPA.Enttec
+  other-modules:       GrandPA.Enttec,
+                       GrandPA.AsciiQuote
   build-depends:       base >=4.7 && < 4.8,
                        bytestring,
                        cereal,
                        netwire == 5.*,
                        sdl2 == 1.*,
-                       stm
+                       template-haskell
   pkgconfig-depends:   libftdi1
   build-tools:         c2hs
   ghc-options:         -Wall
