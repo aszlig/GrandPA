@@ -14,6 +14,7 @@ executable grandpa
   main-is:             Main.hs
   other-modules:       GrandPA.Enttec,
                        GrandPA.AsciiQuote
+                       GrandPA.UI
   build-depends:       base >=4.7 && < 4.8,
                        bytestring,
                        cereal,
