@@ -224,7 +224,7 @@ asciiFontData = [apic|
 
 fontSprite :: Sprite
 fontSprite = Sprite mkPixel asciiFontData
-       where mkPixel _ _ ' ' = 0xff000000
+       where mkPixel _ _ ' ' = 0x000000ff
              mkPixel _ _ _   = 0xffffffff
 
 blitChar :: SpriteContext -> (Int, Int) -> Char -> IO ()
