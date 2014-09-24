@@ -1,11 +1,13 @@
 module GrandPA.UI.Sprite
-    ( PixelGen
+    ( AsciiSprite
+    , PixelGen
+    , Shape(..)
     , Sprite(..)
     , SpriteContext
+    , blitSprite
     , cellSize
     , cells
     , withSprite
-    , blitSprite
     ) where
 
 import Control.Applicative ((<$>))
@@ -21,10 +23,14 @@ import Foreign.Storable (Storable(..))
 
 import qualified Graphics.UI.SDL as SDL
 
+data Shape = Pixel     Word32
+           | SubSprite AsciiSprite
+           deriving Show
+
 type PixelGen = Int        -- ^ The cell of the sprite sheet
              -> (Int, Int) -- ^ X and Y coordinates within the cell
              -> Char       -- ^ Character from the ASCII input
-             -> Word32     -- ^ The new color in RGBA format
+             -> Shape      -- ^ The new shape for this character
 
 data Color = RGBA8888 Word32
              deriving Show
@@ -38,10 +44,15 @@ instance Storable Color where
       where getByte :: Word32 -> Int -> Word8
             getByte v b = fromIntegral $ v `shiftR` (32 - b * 8) .&. 0xff
 
-data Sprite = Sprite
+data Sprite a = Sprite
     { spritePixelGen :: PixelGen
-    , spriteData     :: [[String]]
+    , spriteData     :: [[a]]
     }
+
+type AsciiSprite = Sprite String
+
+instance Show a => Show (Sprite a) where
+    show = show . spriteData
 
 data TexData = TexData
     { tdCells    :: Int
@@ -61,7 +72,11 @@ cellSize = tdCellSize . contextTexData
 cells :: SpriteContext -> Int
 cells = tdCells . contextTexData
 
-genTexData :: Sprite -> TexData
+transformShape :: Shape -> Color
+transformShape (Pixel     p) = RGBA8888 p
+transformShape (SubSprite _) = RGBA8888 0xffffffff -- XXX: dummy!
+
+genTexData :: AsciiSprite -> TexData
 genTexData sprite =
     TexData cellCount (cellWidth, cellHeight) pixelized
   where
@@ -72,8 +87,8 @@ genTexData sprite =
     mapCells = zipWith (curry mapCell) [0 ..]
     mapCell (num, cols) = map (mapColumn num) $ zip [0..] cols
     mapColumn cell (col, rows) = map (mapRow cell col) $ zip [0..] rows
-    mapRow cell col (row, char) =
-        RGBA8888 $ spritePixelGen sprite cell (row, col) char
+    mapRow cell col (row, char) = transformShape $ pixgen cell (row, col) char
+    pixgen = spritePixelGen sprite
 
 createSprite :: SDL.Renderer -> TexData -> IO SpriteContext
 createSprite renderer texdata = withArray (tdData texdata) $ \td -> do
@@ -105,6 +120,6 @@ blitSprite sc (x, y) idx =
     doRender s d = (== 0) <$> SDL.renderCopy target texture s d
     blitIdx n = with (mkSrcRect n) (with dstRect . doRender)
 
-withSprite :: SDL.Renderer -> Sprite -> (SpriteContext -> IO a) -> IO a
+withSprite :: SDL.Renderer -> AsciiSprite -> (SpriteContext -> IO a) -> IO a
 withSprite r sprite = bracket (createSprite r texdata) destroySprite
                 where texdata = genTexData sprite

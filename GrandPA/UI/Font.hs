@@ -5,9 +5,8 @@ import Data.List (elemIndex)
 
 import qualified Graphics.UI.SDL as SDL
 
-import GrandPA.AsciiQuote (apic)
-import GrandPA.UI.Sprite ( Sprite(..), SpriteContext, cellSize
-                         , withSprite, blitSprite)
+import GrandPA.AsciiQuote
+import GrandPA.UI.Sprite
 
 charMap :: String
 charMap = " !\"#$%&'()*+,-./" ++ ['0'..'9'] ++ ":;<=>?@"
@@ -222,10 +221,10 @@ asciiFontData = [apic|
     `--------+--------+--------+--------+--------+--------+--------'
 |]
 
-fontSprite :: Sprite
+fontSprite :: AsciiSprite
 fontSprite = Sprite mkPixel asciiFontData
-       where mkPixel _ _ ' ' = 0x000000ff
-             mkPixel _ _ _   = 0xffffffff
+       where mkPixel _ _ ' ' = Pixel 0x000000ff
+             mkPixel _ _ _   = Pixel 0xffffffff
 
 blitChar :: SpriteContext -> (Int, Int) -> Char -> IO ()
 blitChar sc (x, y) c =
