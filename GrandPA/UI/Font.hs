@@ -1,18 +1,13 @@
 {-# LANGUAGE QuasiQuotes #-}
 module GrandPA.UI.Font (withFont, blitChar, blitString) where
 
-import Control.Applicative ((<$>))
-import Control.Exception (bracket)
-import Control.Monad (void)
-import Data.List (transpose, elemIndex)
-import Data.Word (Word32)
-import Foreign.Marshal.Array (withArray)
-import Foreign.Marshal.Utils (with)
-import Foreign.Ptr (castPtr, nullPtr)
+import Data.List (elemIndex)
 
 import qualified Graphics.UI.SDL as SDL
 
-import GrandPA.AsciiQuote
+import GrandPA.AsciiQuote (apic)
+import GrandPA.UI.Sprite ( Sprite(..), SpriteContext, cellSize
+                         , withSprite, blitSprite)
 
 charMap :: String
 charMap = " !\"#$%&'()*+,-./" ++ ['0'..'9'] ++ ":;<=>?@"
@@ -227,34 +222,19 @@ asciiFontData = [apic|
     `--------+--------+--------+--------+--------+--------+--------'
 |]
 
-fontData :: [Word32]
-fontData = concatMap (concatMap $ map mkPixel) $ transpose asciiFontData
-     where mkPixel ' ' = 0xff000000
-           mkPixel _   = 0xffffffff
+fontSprite :: Sprite
+fontSprite = Sprite asciiFontData mkPixel
+       where mkPixel _ _ ' ' = 0xff000000
+             mkPixel _ _ _   = 0xffffffff
 
-createTexture :: SDL.Renderer -> IO SDL.Texture
-createTexture renderer = withArray fontData $ \texData -> do
-    format <- SDL.masksToPixelFormatEnum 32 0 0 0 0
-    texture <- SDL.createTexture renderer format access width height
-    void $ SDL.updateTexture texture nullPtr (castPtr texData) $ width * 4
-    return texture
-  where
-    access = SDL.textureAccessStatic
-    width  = fromIntegral $ length asciiFontData * 8
-    height = fromIntegral $ length $ head asciiFontData
+blitChar :: SpriteContext -> (Int, Int) -> Char -> IO ()
+blitChar sc (x, y) c =
+    maybe (return ()) (blitSprite sc (x, y)) $ elemIndex c charMap
 
-blitChar :: SDL.Renderer -> SDL.Texture -> (Int, Int) -> Char -> IO Bool
-blitChar r tex (x, y) c =
-    maybe (return False) (blitIdx . fromIntegral) $ elemIndex c charMap
-  where
-    mkSrcRect n = SDL.Rect (n * 8) 0 8 16
-    dstRect = SDL.Rect (fromIntegral x) (fromIntegral y) 8 16
-    doRender s d = (== 0) <$> SDL.renderCopy r tex s d
-    blitIdx n = with (mkSrcRect n) (with dstRect . doRender)
+blitString :: SpriteContext -> (Int, Int) -> String -> IO ()
+blitString sc (x, y) s = mapM_ doChar (zip [0..] s)
+                   where doChar (n, c) = blitChar sc (x + width * n, y) c
+                         width = fst $ cellSize sc
 
-blitString :: SDL.Renderer -> SDL.Texture -> (Int, Int) -> String -> IO Bool
-blitString r tex (x, y) s = and <$> mapM doChar (zip [0..] s)
-                      where doChar (n, c) = blitChar r tex (x + 8 * n, y) c
-
-withFont :: SDL.Renderer -> (SDL.Texture -> IO a) -> IO a
-withFont r = bracket (createTexture r) SDL.destroyTexture
+withFont :: SDL.Renderer -> (SpriteContext -> IO a) -> IO a
+withFont r = withSprite r fontSprite

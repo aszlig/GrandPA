@@ -15,7 +15,8 @@ executable grandpa
   other-modules:       GrandPA.AsciiQuote,
                        GrandPA.Enttec,
                        GrandPA.UI,
-                       GrandPA.UI.Font
+                       GrandPA.UI.Font,
+                       GrandPA.UI.Sprite
   build-depends:       base >=4.7 && < 4.8,
                        bytestring,
                        cereal,

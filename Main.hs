@@ -34,9 +34,9 @@ mainLoop wire session widget = do
              mainLoop newWire newSession widget
 
 main :: IO ()
-main = withUI $ \ui -> do
-    withFont (uiRenderer ui) $ \tex -> do
+main = withUI $ \ui ->
+    withFont (uiRenderer ui) $ \font -> do
         void $ SDL.renderClear $ uiRenderer ui
-        void $ blitString (uiRenderer ui) tex (30, 10) "Hello World!"
+        blitString font (30, 10) "Hello World!"
         void $ SDL.renderPresent $ uiRenderer ui
         withWidget $ mainLoop mainWire clockSession_
