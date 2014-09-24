@@ -24,14 +24,24 @@ import Foreign.Storable (Storable(..))
 import qualified Data.Matrix as M
 import qualified Graphics.UI.SDL as SDL
 
-data Shape = Pixel     Word32
-           | SubSprite AsciiSprite
-           deriving Show
+type AsciiSprite = Sprite String
+
+data Sprite a = Sprite
+    { spritePixelGen :: PixelGen
+    , spriteData     :: [[a]]
+    }
+
+instance Show a => Show (Sprite a) where
+    show = show . spriteData
 
 type PixelGen = Int        -- ^ The cell of the sprite sheet
              -> (Int, Int) -- ^ X and Y coordinates within the cell
              -> Char       -- ^ Character from the ASCII input
              -> Shape      -- ^ The new shape for this character
+
+data Shape = Pixel     Word32
+           | SubSprite AsciiSprite
+           deriving Show
 
 data Color = RGBA8888 Word32
              deriving Show
@@ -44,16 +54,6 @@ instance Storable Color where
         pokeArray (castPtr ptr) $ map (getByte c) [1..4]
       where getByte :: Word32 -> Int -> Word8
             getByte v b = fromIntegral $ v `shiftR` (32 - b * 8) .&. 0xff
-
-data Sprite a = Sprite
-    { spritePixelGen :: PixelGen
-    , spriteData     :: [[a]]
-    }
-
-type AsciiSprite = Sprite String
-
-instance Show a => Show (Sprite a) where
-    show = show . spriteData
 
 type TexData = [M.Matrix Color]
 
