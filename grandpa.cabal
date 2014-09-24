@@ -21,6 +21,7 @@ executable grandpa
                        bytestring,
                        cereal,
                        netwire == 5.*,
+                       matrix == 0.3.*,
                        sdl2 == 1.*,
                        template-haskell
   pkgconfig-depends:   libftdi1

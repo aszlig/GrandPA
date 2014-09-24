@@ -2,7 +2,7 @@ let
   pkgs = import <nixpkgs> {};
 
   inherit (pkgs) SDL2;
-  inherit (pkgs.haskellPackages) cabal c2hs cereal netwire;
+  inherit (pkgs.haskellPackages) cabal c2hs cereal netwire matrix;
 
   libftdi1 = with pkgs; stdenv.mkDerivation rec {
     name = "libftdi1-${version}";
@@ -47,7 +47,7 @@ in cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   pkgconfigDepends = [ libftdi1 ];
-  buildDepends = [ cereal netwire sdl2 ];
+  buildDepends = [ cereal netwire matrix sdl2 ];
   buildTools = [ c2hs ];
   meta = {
     homepage = "https://github.com/rockfabrik/grandpa";

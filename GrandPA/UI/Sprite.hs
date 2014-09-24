@@ -11,16 +11,17 @@ module GrandPA.UI.Sprite
     ) where
 
 import Control.Applicative ((<$>))
+import Control.Arrow ((&&&))
 import Control.Exception (bracket)
 import Control.Monad (void)
 import Data.Bits (shiftR, (.&.))
-import Data.List (transpose)
 import Data.Word (Word8, Word32)
 import Foreign.Marshal.Array (withArray, pokeArray)
 import Foreign.Marshal.Utils (with)
 import Foreign.Ptr (castPtr, nullPtr)
 import Foreign.Storable (Storable(..))
 
+import qualified Data.Matrix as M
 import qualified Graphics.UI.SDL as SDL
 
 data Shape = Pixel     Word32
@@ -54,11 +55,7 @@ type AsciiSprite = Sprite String
 instance Show a => Show (Sprite a) where
     show = show . spriteData
 
-data TexData = TexData
-    { tdCells    :: Int
-    , tdCellSize :: (Int, Int)
-    , tdData     :: [Color]
-    } deriving Show
+type TexData = [M.Matrix Color]
 
 data SpriteContext = SpriteContext
     { contextTexData :: TexData
@@ -67,38 +64,37 @@ data SpriteContext = SpriteContext
     }
 
 cellSize :: SpriteContext -> (Int, Int)
-cellSize = tdCellSize . contextTexData
+cellSize = (M.ncols &&& M.nrows) . head . contextTexData
 
 cells :: SpriteContext -> Int
-cells = tdCells . contextTexData
+cells = length . contextTexData
 
 transformShape :: Shape -> Color
 transformShape (Pixel     p) = RGBA8888 p
 transformShape (SubSprite _) = RGBA8888 0xffffffff -- XXX: dummy!
 
-genTexData :: AsciiSprite -> TexData
-genTexData sprite =
-    TexData cellCount (cellWidth, cellHeight) pixelized
+mapMatrix :: ((Int, Int) -> a -> b) -> M.Matrix a -> M.Matrix b
+mapMatrix f m = M.matrix (M.nrows m) (M.ncols m) $
+    \(y, x) -> f (x - 1, y - 1) (M.unsafeGet y x m)
+
+expandSprite :: AsciiSprite -> TexData
+expandSprite sprite =
+    map (\(cell, m) -> mapMatrix (f cell) m) $ zip [0..] converted
   where
-    cellCount = length $ spriteData sprite
-    cellHeight = length . head $ spriteData sprite
-    cellWidth  = length . head . head $ spriteData sprite
-    pixelized = concatMap concat . transpose . mapCells $ spriteData sprite
-    mapCells = zipWith (curry mapCell) [0 ..]
-    mapCell (num, cols) = map (mapColumn num) $ zip [0..] cols
-    mapColumn cell (col, rows) = map (mapRow cell col) $ zip [0..] rows
-    mapRow cell col (row, char) = transformShape $ pixgen cell (row, col) char
+    converted = map M.fromLists $ spriteData sprite
     pixgen = spritePixelGen sprite
+    f cell pos char = transformShape $ pixgen cell pos char
 
 createSprite :: SDL.Renderer -> TexData -> IO SpriteContext
-createSprite renderer texdata = withArray (tdData texdata) $ \td -> do
+createSprite renderer texdata = withArray flatTexdata $ \td -> do
     format <- SDL.masksToPixelFormatEnum 32 0 0 0 0
     texture <- SDL.createTexture renderer format access width height
     void $ SDL.updateTexture texture nullPtr (castPtr td) $ width * 4
     return $ SpriteContext texdata renderer texture
   where
-    (cWidth, cHeight) = tdCellSize texdata
-    width = fromIntegral $ cWidth * tdCells texdata
+    flatTexdata = M.toList $ foldl1 (M.<|>) texdata
+    (cWidth, cHeight) = (M.ncols &&& M.nrows) $ head texdata
+    width = fromIntegral $ cWidth * length texdata
     height = fromIntegral cHeight
     access = SDL.textureAccessStatic
 
@@ -109,10 +105,9 @@ blitSprite :: SpriteContext -> (Int, Int) -> Int -> IO ()
 blitSprite sc (x, y) idx =
     void . blitIdx $ fromIntegral idx
   where
-    texdata = contextTexData sc
     texture = contextTexture sc
     target = contextTarget sc
-    (width, height) = tdCellSize texdata
+    (width, height) = cellSize sc
     intwidth = fromIntegral width
     intheight = fromIntegral height
     mkSrcRect n = SDL.Rect (n * intwidth) 0 intwidth intheight
@@ -122,4 +117,4 @@ blitSprite sc (x, y) idx =
 
 withSprite :: SDL.Renderer -> AsciiSprite -> (SpriteContext -> IO a) -> IO a
 withSprite r sprite = bracket (createSprite r texdata) destroySprite
-                where texdata = genTexData sprite
+                where texdata = expandSprite sprite
