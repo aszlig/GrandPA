@@ -223,7 +223,7 @@ asciiFontData = [apic|
 |]
 
 fontSprite :: Sprite
-fontSprite = Sprite asciiFontData mkPixel
+fontSprite = Sprite mkPixel asciiFontData
        where mkPixel _ _ ' ' = 0xff000000
              mkPixel _ _ _   = 0xffffffff
 

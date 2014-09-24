@@ -25,8 +25,8 @@ type PixelGen = Int        -- ^ The cell of the sprite sheet
              -> Word32     -- ^ The new color in RGBA format
 
 data Sprite = Sprite
-    { spriteData     :: [[String]]
-    , spritePixelGen :: PixelGen
+    { spritePixelGen :: PixelGen
+    , spriteData     :: [[String]]
     }
 
 data TexData = TexData
