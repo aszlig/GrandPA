@@ -14,6 +14,7 @@ executable grandpa
   main-is:             Main.hs
   other-modules:       GrandPA.AsciiQuote,
                        GrandPA.Enttec,
+                       GrandPA.Sprites,
                        GrandPA.UI,
                        GrandPA.UI.Font,
                        GrandPA.UI.Sprite
