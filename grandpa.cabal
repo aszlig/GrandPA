@@ -23,7 +23,8 @@ executable grandpa
                        netwire == 5.*,
                        matrix == 0.3.*,
                        sdl2 == 1.*,
-                       template-haskell
+                       template-haskell,
+                       vector
   pkgconfig-depends:   libftdi1
   build-tools:         c2hs
   ghc-options:         -Wall

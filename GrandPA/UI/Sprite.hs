@@ -22,6 +22,7 @@ import Foreign.Ptr (castPtr, nullPtr)
 import Foreign.Storable (Storable(..))
 
 import qualified Data.Matrix as M
+import qualified Data.Vector as V
 import qualified Graphics.UI.SDL as SDL
 
 type AsciiSprite = Sprite String
@@ -69,21 +70,45 @@ cellSize = (M.ncols &&& M.nrows) . head . contextTexData
 cells :: SpriteContext -> Int
 cells = length . contextTexData
 
-transformShape :: Shape -> Color
-transformShape (Pixel     p) = RGBA8888 p
-transformShape (SubSprite _) = RGBA8888 0xffffffff -- XXX: dummy!
-
 mapMatrix :: ((Int, Int) -> a -> b) -> M.Matrix a -> M.Matrix b
 mapMatrix f m = M.matrix (M.nrows m) (M.ncols m) $
     \(y, x) -> f (x - 1, y - 1) (M.unsafeGet y x m)
 
-expandSprite :: AsciiSprite -> TexData
-expandSprite sprite =
-    map (\(cell, m) -> mapMatrix (f cell) m) $ zip [0..] converted
+flattenMatrix :: M.Matrix (M.Matrix a) -> M.Matrix a
+flattenMatrix = foldl1 (M.<->) . map (foldl1 (M.<|>)) . M.toLists
+
+transformShapes :: M.Matrix Shape -> M.Matrix Color
+transformShapes m = flattenMatrix $ mapMatrix toColors m
   where
-    converted = map M.fromLists $ spriteData sprite
-    pixgen = spritePixelGen sprite
-    f cell pos char = transformShape $ pixgen cell pos char
+    -------------------  SIZE TABLE  -------------------
+    ----------------------------------------------------
+    --       c1    c2    c3    c4    c5    c6    c7   --
+    --  r1 (1,1) (1,1) (1,1) (1,1) (1,1) (1,1) (1,1)  --
+    --  r2 (1,1) (4,4) (1,1) (4,4) (1,1) (4,4) (1,1)  --
+    --  r3 (1,1) (1,1) (1,1) (1,1) (1,1) (1,1) (1,1)  --
+    --  r4 (1,1) (1,1) (1,1) (1,1) (1,1) (4,4) (1,1)  --
+    --  r5 (1,1) (1,1) (1,1) (1,1) (1,1) (1,1) (1,1)  --
+    sizes = mapMatrix (const getSize) m
+
+    getSize (Pixel     _) = (1, 1)
+    getSize (SubSprite s) = (M.ncols &&& M.nrows) . head $ expandSprite s
+
+    vectorMax f = V.foldr (max . f) 0
+    maxW = map (\c -> vectorMax fst $ M.getCol c sizes) [1..M.ncols sizes]
+    maxH = map (\r -> vectorMax snd $ M.getRow r sizes) [1..M.nrows sizes]
+
+    scaleBy (w, h) = M.extendTo (RGBA8888 0xffffffff) h w
+    toColors (x, y) = scaleBy (maxW !! x, maxH !! y) . reduceShape
+
+    reduceShape (Pixel     p) = M.fromList 1 1 [RGBA8888 p]
+    reduceShape (SubSprite s) = head $ expandSprite s
+
+expandSprite :: AsciiSprite -> TexData
+expandSprite sprite = map transformShapes shapes
+                where shapes = zipWith (curry genShape) [0..] converted
+                      genShape (cell, m) = mapMatrix (pixgen cell) m
+                      converted = map M.fromLists $ spriteData sprite
+                      pixgen = spritePixelGen sprite
 
 createSprite :: SDL.Renderer -> TexData -> IO SpriteContext
 createSprite renderer texdata = withArray flatTexdata $ \td -> do
