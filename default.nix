@@ -1,8 +1,7 @@
 let
   pkgs = import <nixpkgs> {};
 
-  inherit (pkgs) SDL2;
-  inherit (pkgs.haskellPackages) cabal c2hs cereal netwire matrix;
+  inherit (pkgs.haskellPackages) cabal c2hs cereal netwire matrix sdl2;
 
   libftdi1 = with pkgs; stdenv.mkDerivation rec {
     name = "libftdi1-${version}";
@@ -26,19 +25,6 @@ let
       license = stdenv.lib.licenses.gpl2Plus;
     };
   };
-
-  sdl2 = cabal.mkDerivation (self: {
-    pname = "sdl2";
-    version = "1.1.0";
-    sha256 = "1ppxskh810nbziszlkdmk38x74lspsrqm1kpyiir1xj2a7122fkv";
-    extraLibraries = [ SDL2 ];
-    pkgconfigDepends = [ SDL2 ];
-    meta = {
-      description = "Bindings to SDL2";
-      license = self.stdenv.lib.licenses.bsd3;
-      platforms = self.ghc.meta.platforms;
-    };
-  });
 
 in cabal.mkDerivation (self: {
   pname = "grandpa";
