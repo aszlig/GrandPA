@@ -36,5 +36,5 @@ setup(name='GrandPA',
       ext_modules=[mouse, fb],
       scripts=['bin/grandpa'],
       packages=['grandpa', 'grandpa.interface', 'grandpa.interface.ncurses',
-                'grandpa.interface.pyglet', 'grandpa.inputdev',
-                'grandpa.inputdev.console', 'grandpa.chasers'])
+                'grandpa.inputdev', 'grandpa.inputdev.console',
+                'grandpa.chasers'])

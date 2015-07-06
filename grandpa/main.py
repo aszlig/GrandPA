@@ -20,13 +20,7 @@ import logging
 import optparse
 import shelve
 
-try:
-    import pyglet
-    pyglet.window.get_platform()
-except:
-    from interface.ncurses import main as interface
-else:
-    from interface.pyglet import main as interface
+from interface.ncurses import main as interface
 
 
 class Grandpa(object):
