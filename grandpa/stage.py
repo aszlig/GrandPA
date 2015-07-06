@@ -42,6 +42,36 @@ class Rockfabrik(Stage):
         4: (0x1b1, 'eurolite'),
     }
 
+    def set_flashers(self):
+        """
+        Return the default settings for all flashers.
+        """
+        return [
+            ['XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX',
+             'X.. X.. X.. X.. X.. X.. X.. X.. X.. X.. X.. X..',
+             '.X. .X. .X. .X. .X. .X. .X. .X. .X. .X. .X. .X.',
+             '..X ..X ..X ..X ..X ..X ..X ..X ..X ..X ..X ..X',
+             '... XXX ... ... XXX ... ... XXX ... ... XXX ...'],
+
+            ['XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX',
+             'XXX ... ... ... ... XXX XXX ... ... ... ... XXX',
+             '... XXX ... ... XXX ... ... XXX ... ... XXX ...',
+             '... ... XXX XXX ... ... ... ... XXX XXX ... ...',
+             'XXX XX. X.. X.. XX. XXX XXX XX. X.. X.. XX. XXX'],
+
+            ['XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX',
+             'XXX ... ... XXX ... ... XXX ... ... XXX ... ...',
+             '... XXX ... ... XXX ... ... XXX ... ... XXX ...',
+             '... ... XXX ... ... XXX ... ... XXX ... ... XXX',
+             'X.. X.. X.. X.. X.. X.. X.. X.. X.. X.. X.. X..'],
+
+            ['... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...'],
+        ]
+
     def set_view(self, tavern, bar_length, width, height):
         """
         The view for the Rockfabrik stage design.

@@ -127,7 +127,15 @@ class Keys(threading.Thread):
         elif self.keycode in (0xb8, 0xe4):
             self.mod_meta = False
 
+    def decode_flasher(self, chars):
+        filtered = map(lambda c: c == "X", filter(lambda c: c in "X.", chars))
+        return [filtered[i:i + 3] for i in range(0, len(filtered), 3)]
+
     def init_selects(self):
+        if hasattr(self.root.tavern.stage, 'set_flashers'):
+            return [[self.decode_flasher(flasher) for flasher in stack]
+                    for stack in self.root.tavern.stage.set_flashers()]
+
         selects = []
         for x in xrange(4):
             flashers = []
