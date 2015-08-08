@@ -109,9 +109,13 @@ class Rockfabrik(Stage):
 
         for barnum in range(6):
             offset = mid_start + mid_bar_and_spacing * barnum
-            tavern.newbar(int(midx - bar_midx), int(offset))
+            tavern.newbar(int(midx - bar_midx), int(offset), inverted=True)
 
         for offset, inverted in [(0, True), (width - bar_width, False)]:
             tavern.newbar(offset, 0, view_inverted=inverted)
             tavern.newbar(offset, int(midy - bar_midy), view_inverted=inverted)
-            tavern.newbar(offset, height - bar_height, view_inverted=inverted)
+            if offset == 0:
+                tavern.newbar(offset, height - bar_height, inverted=inverted)
+            else:
+                tavern.newbar(offset, height - bar_height,
+                              view_inverted=inverted)
