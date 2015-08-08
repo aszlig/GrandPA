@@ -133,10 +133,12 @@ class Section(object):
 
 
 class Bar(object):
-    def __init__(self, root, number, x, y, inverted=False, fbdev=None):
+    def __init__(self, root, number, x, y, inverted=False, view_inverted=False,
+                 fbdev=None):
         self.root = root
         self.selected = False
         self.inverted = inverted
+        self.view_inverted = view_inverted
 
         self.win = root.view_win.derwin(3, root.BAR_LENGTH + 2, y, x)
         self.number = number
@@ -148,12 +150,13 @@ class Bar(object):
 
         # initialize dimmer sections
         for s in xrange(3):
+            sp = 2 - s if view_inverted else s
             if fbdev is None:
-                sect = self.win.derwin(1, sectsize + 1, 1, 1 + sectsize * s)
+                sect = self.win.derwin(1, sectsize + 1, 1, 1 + sectsize * sp)
                 setattr(self, 'section%d' % (s + 1),
                         Section(sectsize, bar=self, sect=sect))
             else:
-                rect = fbdev.newrect(bar_x + 1 + sectsize * s, bar_y + 1,
+                rect = fbdev.newrect(bar_x + 1 + sectsize * sp, bar_y + 1,
                                      sectsize, 1)
                 setattr(self, 'section%d' % (s + 1),
                         Section(sectsize, bar=self, rect=rect))
@@ -176,7 +179,7 @@ class Bar(object):
         self.win.attroff(attr)
 
         for n in xrange(3):
-            if self.inverted:
+            if self.inverted or self.view_inverted:
                 sectnum = 2 - n
             else:
                 sectnum = n

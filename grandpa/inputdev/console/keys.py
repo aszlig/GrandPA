@@ -28,8 +28,11 @@ KEYMAP = {
     'select_all': 0x1e,  # a
     'select_odd': 0x1f,  # o
     'select_even': 0x20,  # e
-    'select_none': 0x26,  # n
+    'select_none': 0x21,  # u
     'select_invert': 0x22,  # i
+
+    'select_group1': 0x10,  # ,
+    'select_group2': 0x11,  # .
 
     'select_direct': [
         # f1-f12
@@ -47,6 +50,11 @@ KEYMAP = {
     'flash_2': 0x32,  # m
     'flash_3': 0x33,  # w
     'flash_4': 0x34,  # v
+
+    'flash_5': 0x23,  # d
+    'flash_6': 0x24,  # h
+    'flash_7': 0x25,  # t
+    'flash_8': 0x26,  # n
 
     'numbers': [
         # 0-9
@@ -139,7 +147,7 @@ class Keys(threading.Thread):
         selects = []
         for x in xrange(4):
             flashers = []
-            for y in xrange(5):
+            for y in xrange(9):
                 flashers.append([])
 
             selects.append(flashers)
@@ -167,10 +175,14 @@ class Keys(threading.Thread):
             'flash_2': 2,
             'flash_3': 3,
             'flash_4': 4,
+            'flash_5': 5,
+            'flash_6': 6,
+            'flash_7': 7,
+            'flash_8': 8,
         }
 
         self.selects = self.root.config.get('selections', self.init_selects())
-        self.keep_dimmer = [False] * 5
+        self.keep_dimmer = [False] * 9
 
         buf = ''
         while not (self.pressed('quit') and self.mod_meta):
@@ -268,6 +280,12 @@ class Keys(threading.Thread):
                 reset = True
             elif self.pressed('select_invert'):
                 self.selector(toggle=True)
+                reset = True
+            elif self.pressed('select_group1'):
+                self.selector(function=lambda x: x < 6)
+                reset = True
+            elif self.pressed('select_group2'):
+                self.selector(function=lambda x: x >= 6)
                 reset = True
 
             # misc

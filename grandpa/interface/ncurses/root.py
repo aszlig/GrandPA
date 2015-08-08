@@ -48,9 +48,7 @@ class Root(object):
         view_max_y, view_max_x = self.view_win.getmaxyx()
 
         # clock
-        clock_win = self.view_win.derwin(3, 41, int(view_max_y / 2 - 1.5),
-                                         int(view_max_x / 2 - 15))
-
+        clock_win = self.view_win.derwin(3, 41, 0, int(view_max_x / 2 - 15))
         self.clock = Clock(clock_win)
 
         # status line
@@ -109,14 +107,16 @@ class Root(object):
         """
         max_y, max_x = self.win.getmaxyx()
 
-        width = int(max_x * 0.75)
+        # 3 * -2 = 6 because of the faders
+        width = max_x - 6
         height = int(max_y * 0.75)
 
-        x = int(max_x / 2 - width / 2)
+        x = 0
         # towards the status bar
         y = max_y - height
 
-        view = self.win.derwin(height, width, y, x)
+        # height - 1 because of the status bar
+        view = self.win.derwin(height - 1, width, y, x)
         return view
 
     def getch(self):

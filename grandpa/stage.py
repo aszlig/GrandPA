@@ -28,18 +28,18 @@ class Stage(object):
 
 class Rockfabrik(Stage):
     FIXTURE_MAPPING = {
-        3: (0x12d, 'eurolite'),
-        2: (0x139, 'eurolite'),
-        1: (0x145, 'eurolite'),
-        12: (0x151, 'eurolite'),
-        11: (0x15d, 'eurolite'),
-        10: (0x169, 'eurolite'),
-        9: (0x175, 'eurolite'),
-        8: (0x181, 'eurolite'),
-        7: (0x18d, 'eurolite'),
-        6: (0x199, 'eurolite'),
-        5: (0x1a5, 'eurolite'),
-        4: (0x1b1, 'eurolite'),
+        9: (0x12d, 'eurolite'),
+        1: (0x139, 'eurolite'),
+        6: (0x145, 'eurolite'),
+        4: (0x151, 'eurolite'),
+        2: (0x15d, 'eurolite'),
+        8: (0x169, 'eurolite'),
+        3: (0x175, 'eurolite'),
+        7: (0x181, 'eurolite'),
+        11: (0x18d, 'eurolite'),
+        10: (0x199, 'eurolite'),
+        12: (0x1a5, 'eurolite'),
+        5: (0x1b1, 'eurolite'),
     }
 
     def set_flashers(self):
@@ -51,21 +51,37 @@ class Rockfabrik(Stage):
              'X.. X.. X.. X.. X.. X.. X.. X.. X.. X.. X.. X..',
              '.X. .X. .X. .X. .X. .X. .X. .X. .X. .X. .X. .X.',
              '..X ..X ..X ..X ..X ..X ..X ..X ..X ..X ..X ..X',
-             '... XXX ... ... XXX ... ... XXX ... ... XXX ...'],
+             '... XXX ... ... XXX ... ... XXX ... ... XXX ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...'],
 
             ['XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX',
              'XXX ... ... ... ... XXX XXX ... ... ... ... XXX',
              '... XXX ... ... XXX ... ... XXX ... ... XXX ...',
              '... ... XXX XXX ... ... ... ... XXX XXX ... ...',
-             'XXX XX. X.. X.. XX. XXX XXX XX. X.. X.. XX. XXX'],
+             'XXX XX. X.. X.. XX. XXX XXX XX. X.. X.. XX. XXX',
+             '... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...'],
 
             ['XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX',
              'XXX ... ... XXX ... ... XXX ... ... XXX ... ...',
              '... XXX ... ... XXX ... ... XXX ... ... XXX ...',
              '... ... XXX ... ... XXX ... ... XXX ... ... XXX',
-             'X.. X.. X.. X.. X.. X.. X.. X.. X.. X.. X.. X..'],
+             'X.. X.. X.. X.. X.. X.. X.. X.. X.. X.. X.. X..',
+             '... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...'],
 
             ['... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...',
+             '... ... ... ... ... ... ... ... ... ... ... ...',
              '... ... ... ... ... ... ... ... ... ... ... ...',
              '... ... ... ... ... ... ... ... ... ... ... ...',
              '... ... ... ... ... ... ... ... ... ... ... ...',
@@ -76,62 +92,26 @@ class Rockfabrik(Stage):
         """
         The view for the Rockfabrik stage design.
         """
-        midx, midy = int(width / 2), int(height / 2)
+        midx, midy = width / 2, height / 2
 
-        radius_vertical = midy
-        radius_horizontal = midx
+        bar_width = bar_length + 2
+        bar_height = 3
 
-        bar_midx = int((bar_length + 2) / 2)
-        bar_midy = 1.5
+        bar_midx = bar_width / 2
+        bar_midy = bar_height / 2
 
-        angles = [6, 15, 29]
+        mid_barcount = 6
+        mid_area = min(abs(height - 10), height)
+        mid_spacing = (mid_area - (bar_height * mid_barcount))
+        mid_spacing /= mid_barcount - 1
+        mid_start = midy - mid_area / 2
+        mid_bar_and_spacing = bar_height + mid_spacing
 
-        all_angles = list(angles)
-        all_angles += reversed(map(lambda x: (90 - x) + 90, angles))
-        all_angles += map(lambda x: x + 180, angles)
-        all_angles += reversed(map(lambda x: (90 - x) + 270, angles))
+        for barnum in range(6):
+            offset = mid_start + mid_bar_and_spacing * barnum
+            tavern.newbar(int(midx - bar_midx), int(offset))
 
-        for degree in all_angles:
-            angle = degree * math.pi / 180.0
-
-            r = 0.5 / math.sqrt(
-                (math.cos(angle) / float(radius_horizontal * 2)) ** 2 +
-                (math.sin(angle) / float(radius_vertical * 2)) ** 2
-            )
-
-            cx = midx + r * math.cos(angle)
-            cy = midy + r * math.sin(angle)
-
-            x = int(cx - bar_midx)
-            y = int(cy - bar_midy)
-
-            if 90 < degree <= 270:
-                # left
-                x += 15
-            else:
-                # right
-                x -= 15
-
-            if degree > 180:
-                # upper
-                y += 5
-            else:
-                # lower
-                y -= 5
-
-            # ensure that we don't leave the window
-
-            if y > (height - 3):
-                y = height - 3
-            elif y < 0:
-                y = 0
-
-            if x > (width - bar_length - 2):
-                x = width - bar_length - 2
-            elif x < 0:
-                x = 0
-
-            if 90 < degree <= 270:
-                tavern.newbar(x, y, inverted=True)
-            else:
-                tavern.newbar(x, y)
+        for offset, inverted in [(0, True), (width - bar_width, False)]:
+            tavern.newbar(offset, 0, view_inverted=inverted)
+            tavern.newbar(offset, int(midy - bar_midy), view_inverted=inverted)
+            tavern.newbar(offset, height - bar_height, view_inverted=inverted)

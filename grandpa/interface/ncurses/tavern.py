@@ -37,9 +37,10 @@ class Tavern(object):
 
         self.recorder = None
 
-    def newbar(self, x, y, inverted=False):
+    def newbar(self, x, y, inverted=False, view_inverted=False):
         num = len(self.bars) + 1
-        bar = fixture.Bar(self.root, num, x, y, inverted, self.fbdev)
+        bar = fixture.Bar(self.root, num, x, y, inverted, view_inverted,
+                          self.fbdev)
         self.bars.append(bar)
 
     def refresh(self, hard=False):
