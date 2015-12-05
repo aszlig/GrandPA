@@ -69,7 +69,8 @@ cdef extern from "gpm.h":
 
 cdef extern from "sys/select.h":
     cdef struct timeval:
-        pass
+        long tv_sec
+        long tv_usec
 
     ctypedef struct fd_set:
         pass
@@ -119,6 +120,9 @@ class Mouse(threading.Thread):
         if timeout > 0:
             FD_ZERO(&gpmwatch);
             FD_SET(gpm_fd, &gpmwatch);
+
+            tv.tv_sec = timeout
+            tv.tv_usec = 0
 
             with nogil:
                 result = select(gpm_fd + 1, &gpmwatch, NULL, NULL, &tv)
