@@ -2,6 +2,10 @@ import threading
 import Queue
 
 
+class RecorderClash(Exception):
+    pass
+
+
 class Recorder(threading.Thread):
     def __init__(self, fixtures):
         threading.Thread.__init__(self)

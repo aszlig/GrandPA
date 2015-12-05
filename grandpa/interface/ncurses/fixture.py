@@ -16,7 +16,6 @@
 # along with GrandPA. If not, see <http://www.gnu.org/licenses/>.
 
 import threading
-from functools import partial
 
 import curses
 

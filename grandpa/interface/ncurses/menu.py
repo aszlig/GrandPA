@@ -19,7 +19,7 @@ import time
 
 import style
 from grandpa.chaser import Chaser
-import grandpa.chasers
+import grandpa.chasers  # NOQA
 
 from grandpa import locking
 

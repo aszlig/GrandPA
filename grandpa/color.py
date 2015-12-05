@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with GrandPA. If not, see <http://www.gnu.org/licenses/>.
 
-from functools import partial
-
 COLORMAP = {
     (0xaa, 0x00, 0x00): 'bright_red',       # dark red
     (0x00, 0xaa, 0x00): 'japanese_laurel',  # dark green
@@ -219,9 +217,6 @@ if __name__ == '__main__':
 
     print Color(100, 200, 0).get_name()
     print Color(100, 200, 0).get_name()
-
-    #for i in xrange(255):
-    #    print (Color(0, 255, 0, 0) + Color(255, 0, 0, 10)).get_name()
 
     for c in Color(255, 0, 0, 20).fade_to(Color(0, 0, 255)):
         print c

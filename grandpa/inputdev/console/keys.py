@@ -16,7 +16,6 @@
 # along with GrandPA. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import curses
 import threading
 import Queue
 
@@ -256,10 +255,6 @@ class Keys(threading.Thread):
                 reset = True
             elif self.pressed('reset_chasers'):
                 self.root.menu.reset()
-
-            # effects engine
-            #elif self.pressed('record_chaser'):
-            #    self.record_chaser()
 
             # selector
             elif self.pressed('select_direct'):

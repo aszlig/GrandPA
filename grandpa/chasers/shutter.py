@@ -16,7 +16,6 @@
 # along with GrandPA. If not, see <http://www.gnu.org/licenses/>.
 
 import random
-import logging
 
 from grandpa.chaser import Chaser
 

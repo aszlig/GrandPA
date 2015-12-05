@@ -83,7 +83,7 @@ class DistortedFade(Chaser):
         self.wait(0.3, frames=self.frames)
 
 if __name__ == '__main__':
-    s = SectionFade(None, range(1, 10))
+    s = SimpleFade(None, range(1, 10))
     i = iter(s.sectionjump())
     for n in xrange(60):
         print i.next()

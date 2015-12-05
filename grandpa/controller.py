@@ -22,8 +22,6 @@ of the fixtures to the interface.
 import logging
 import threading
 import Queue
-import socket
-import array
 
 from grandpa import dmx
 from grandpa import fixture

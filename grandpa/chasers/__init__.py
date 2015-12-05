@@ -15,6 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with GrandPA. If not, see <http://www.gnu.org/licenses/>.
 
-from color import *
-from fade import *
-from shutter import *
+from color import *  # NOQA
+from fade import *  # NOQA
+from shutter import *  # NOQA

@@ -15,14 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with GrandPA. If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import time
 import threading
 import logging
 
 import fixture
-
-from grandpa.color import Color
 
 
 class ChaserError(RuntimeError):

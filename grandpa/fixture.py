@@ -25,7 +25,6 @@ class Section(object):
         self.visual = visual
 
         self.color = Color()
-        #self.basecolor = Color()
 
     def has_changed(self):
         return self.color.has_changed

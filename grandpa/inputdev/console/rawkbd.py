@@ -41,8 +41,6 @@ def set_raw_kbd():
     term = termios.tcgetattr(sys.stdin.fileno())
 
     newterm = list(term)
-    c_iflag = term[0]
-    c_cc = term[6]
 
     # unset some iflags
     newterm[0] &= ~(termios.ISTRIP | termios.INLCR | termios.IGNCR |
