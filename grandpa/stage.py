@@ -113,7 +113,8 @@ class Rockfabrik(Stage):
             tavern.newbar(offset, 0, view_inverted=inverted)
             tavern.newbar(offset, int(midy - bar_midy), view_inverted=inverted)
             if offset == 0:
-                tavern.newbar(offset, height - bar_height, inverted=inverted)
+                tavern.newbar(offset, height - bar_height, inverted=False,
+                              view_inverted=inverted)
             else:
                 tavern.newbar(offset, height - bar_height,
                               view_inverted=inverted)
