@@ -1,14 +1,10 @@
 with import <nixpkgs> {};
 
-buildPythonPackage {
+pythonPackages.buildPythonApplication {
   name = "grandpa-0.5";
   src = ./.;
 
-  propagatedBuildInputs = with pythonPackages; [
-    python.modules.curses
-    python.modules.bsddb
-    pyserial
-  ];
+  propagatedBuildInputs = [ pythonPackages.pyserial ];
 
-  buildInputs = [ cython gpm ];
+  buildInputs = with pythonPackages; [ cython gpm ];
 }
